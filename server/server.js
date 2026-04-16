@@ -5,6 +5,7 @@ const path = require('path');
 dotenv.config({ path: path.resolve(__dirname, '.env') });
 
 const cors = require("cors");
+const app = express();
 
 app.use(cors({
   origin: "https://your-frontend.vercel.app",

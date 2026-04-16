@@ -4,7 +4,13 @@ const path = require('path');
 
 dotenv.config({ path: path.resolve(__dirname, '.env') });
 
-const cors = require('cors');
+const cors = require("cors");
+
+app.use(cors({
+  origin: "https://your-frontend.vercel.app",
+  credentials: true
+}));
+
 const connectDB = require('./config/db');
 
 (async () => {
@@ -44,4 +50,4 @@ process.on('unhandledRejection', (reason, promise) => {
 
 process.on('uncaughtException', (err) => {
   console.error('Uncaught Exception:', err);
-});
+});

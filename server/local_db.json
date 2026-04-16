@@ -1,0 +1,172 @@
+{
+  "users": [
+    {
+      "name": "Script User",
+      "email": "script@test.com",
+      "password": "password123",
+      "_id": "mock_user_1776169973699"
+    },
+    {
+      "name": "Test User",
+      "email": "test1@test.com",
+      "password": "password",
+      "_id": "mock_user_1776327482089"
+    }
+  ],
+  "chats": [
+    {
+      "user": "mock_user_1776169973699",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is BNS?"
+        },
+        {
+          "role": "assistant",
+          "content": "**BNS ka matlab kya hai?**\n\nBNS ka matlab hai Bharatiya Nishpakshata Sanhita (Indian Evidence Act). Yeh ek Bharatiya kanoon hai jo shahadat aur pramana ke baare mein nirdesh deta hai. Yeh 1872 mein banaya gaya tha aur abhi bhi Bharat mein lagu hai.\n\n\\n\\n\n\n**BNS ka mahatva**\n\nBNS ka mahatva hai ki yeh shahadat aur pramana ke baare mein nirdesh deta hai. Yeh kanoon shahadat ke prakaar, shahadat ke pramaan, aur shahadat ke sambandh mein nirdesh deta hai. Yeh kanoon Bharatiya nyayalayaon mein lagu hota hai aur shahadat ke baare mein nirnay lene mein madad karta hai.\n\n\\n\\n\n\n**BNS ke kuch mahatvapoorn prakaar**\n\n*   **Prathamik shahadat**: Yeh prakaar shahadat hai jo kisi vyakti ne apne aap ko ya apne aap ke liye di hai.\n*   **Dwitiya shahadat**: Yeh prakaar shahadat hai jo kisi vyakti ne anya vyakti ke liye di hai.\n*   **Pramana**: Yeh prakaar shahadat hai jo kisi pramaan ke roop mein di jati hai, jaise ki patra, video, ya audio.\n\n\\n\\n\n\n**Dhyan Dein**\n\nMain ek AI hoon, final advice ke liye lawyer se milein."
+        },
+        {
+          "role": "user",
+          "content": "Tell me more about it."
+        },
+        {
+          "role": "assistant",
+          "content": "**BNS ke kuch anya mahatvapoorn prakaar**\n\n*   **Sambandhit shahadat**: Yeh prakaar shahadat hai jo kisi vyakti ke sambandh mein di jati hai, jaise ki pati, patni, ya bachche.\n*   **Aayu shahadat**: Yeh prakaar shahadat hai jo kisi vyakti ki aayu ke baare mein di jati hai.\n*   **Jati shahadat**: Yeh prakaar shahadat hai jo kisi vyakti ki jati ke baare mein di jati hai.\n\n\\n\\n\n\n**BNS ke kanoon**\n\n*   **Section 3**: Yeh kanoon shahadat ke prakaar ke baare mein nirdesh deta hai.\n*   **Section 59**: Yeh kanoon shahadat ke pramaan ke baare mein nirdesh deta hai.\n*   **Section 118**: Yeh kanoon shahadat ke sambandh mein nirdesh deta hai.\n\n\\n\\n\n\n**BNS ke mahatva**\n\n*   **Nyayalayaon mein madad**: BNS nyayalayaon mein shahadat ke baare mein nirnay lene mein madad karta hai.\n*   **Shahadat ke prakaar**: BNS shahadat ke prakaar ke baare mein nirdesh deta hai.\n*   **Shahadat ke pramaan**: BNS shahadat ke pramaan ke baare mein nirdesh deta hai.\n\n\\n\\n\n\n**Dhyan Dein**\n\nMain ek AI hoon, final advice ke liye lawyer se milein."
+        }
+      ],
+      "_id": "mock_chat_1776311967290",
+      "updatedAt": "2026-04-16T04:30:19.200Z",
+      "title": "Basic Network Services Ka Baap",
+      "isPinned": true
+    },
+    {
+      "user": "mock_user_1776169973699",
+      "messages": [],
+      "_id": "mock_chat_1776312114458",
+      "updatedAt": "2026-04-16T04:01:54.458Z"
+    },
+    {
+      "user": "mock_user_1776169973699",
+      "messages": [],
+      "_id": "mock_chat_1776312213371",
+      "updatedAt": "2026-04-16T04:03:33.371Z"
+    },
+    {
+      "user": "mock_user_1776169973699",
+      "messages": [],
+      "_id": "mock_chat_1776312213612",
+      "updatedAt": "2026-04-16T04:03:33.612Z"
+    },
+    {
+      "user": "mock_user_1776169973699",
+      "messages": [],
+      "_id": "mock_chat_1776312213655",
+      "updatedAt": "2026-04-16T04:03:33.655Z"
+    },
+    {
+      "user": "mock_user_1776169973699",
+      "messages": [],
+      "_id": "mock_chat_1776312213836",
+      "updatedAt": "2026-04-16T04:28:39.816Z",
+      "isPinned": false
+    },
+    {
+      "user": "mock_user_1776169973699",
+      "messages": [],
+      "_id": "mock_chat_1776312213886",
+      "updatedAt": "2026-04-16T04:03:33.886Z"
+    },
+    {
+      "user": "mock_user_1776169973699",
+      "messages": [],
+      "_id": "mock_chat_1776312213912",
+      "updatedAt": "2026-04-16T04:03:33.912Z"
+    },
+    {
+      "user": "mock_user_1776169973699",
+      "messages": [],
+      "_id": "mock_chat_1776312214173",
+      "updatedAt": "2026-04-16T04:03:34.173Z"
+    },
+    {
+      "user": "mock_user_1776169973699",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Bhai theft ki kya punishment hai naye BNS kanoon ke hisab se?"
+        },
+        {
+          "role": "assistant",
+          "content": "**Theft ki Punishment**\n\n**Summary**: Aapne theft ki punishment ke bare mein puchha hai. \n\n**Legal Context**: Theft ki definition Section 379 of the Indian Penal Code (IPC) mein di gayi hai. Yeh kaha hai ki kisi bhi vyakti ne kisi aur ka samarpit property chur liya hai, toh use theft ke liye dand ka shikaar hona hoga.\n\n**Action Steps**:\n\n*   IPC Section 379 ke hisab se, theft ki punishment 3 saal tak ki katiya jaati hai.\n*   Agar theft mein property ki koi bhi khatarnaak cheez hoti hai, toh punishment 7 saal tak ki ho sakti hai.\n*   Agar theft mein property ki koi bhi khatarnaak cheez hoti hai aur property ki koi bhi khatarnaak cheez hoti hai, toh punishment 10 saal tak ki ho sakti hai.\n\n**Dhyan Dein**: Main ek AI hoon, final advice ke liye ek qualified lawyer se milein."
+        },
+        {
+          "role": "user",
+          "content": "Can you explain this in pure English now?"
+        },
+        {
+          "role": "assistant",
+          "content": "**Theft Punishment Under the New Penal Code**\n\n**Summary**: You have inquired about the punishment for theft under the new penal code.\n\n**Legal Context**: The definition of theft is provided under Section 379 of the Indian Penal Code (IPC). It states that if any person takes away any property belonging to another person, they shall be liable to punishment for theft.\n\n**Action Steps**:\n\n*   Under IPC Section 379, the punishment for theft can be up to 3 years of imprisonment.\n*   If the theft involves any hazardous property, the punishment can be up to 7 years of imprisonment.\n*   If the theft involves any hazardous property and the property itself is hazardous, the punishment can be up to 10 years of imprisonment.\n\n**Note**: I am an AI, please consult a qualified lawyer for final advice."
+        },
+        {
+          "role": "user",
+          "content": "Theek hai, ab wapis Hinglish mein aa jao."
+        },
+        {
+          "role": "assistant",
+          "content": "**Theft Punishment Wapas Hinglish Mein**\n\n**Summary**: Aapne theft ki punishment ke bare mein puchha tha, ab wapas Hinglish mein aaya hoon.\n\n**Legal Context**: Theft ki definition Section 379 of the Indian Penal Code (IPC) mein di gayi hai. Yeh kaha hai ki kisi bhi vyakti ne kisi aur ka samarpit property chur liya hai, toh use theft ke liye dand ka shikaar hona hoga.\n\n**Action Steps**:\n\n*   IPC Section 379 ke hisab se, theft ki punishment 3 saal tak ki katiya jaati hai.\n*   Agar theft mein property ki koi bhi khatarnaak cheez hoti hai, toh punishment 7 saal tak ki ho sakti hai.\n*   Agar theft mein property ki koi bhi khatarnaak cheez hoti hai aur property ki koi bhi khatarnaak cheez hoti hai, toh punishment 10 saal tak ki ho sakti hai.\n\n**Dhyan Dein**: Main ek AI hoon, final advice ke liye ek qualified lawyer se milein."
+        },
+        {
+          "role": "user",
+          "content": "okk byee"
+        },
+        {
+          "role": "assistant",
+          "content": "**Alvida**\n\nMain aapko kuchh bhi help karne ke liye taiyar hoon. Agar aapko koi aur sawal ho, toh zaroor puchhein. \n\nBye for now!"
+        },
+        {
+          "role": "user",
+          "content": "english me bol"
+        },
+        {
+          "role": "assistant",
+          "content": "**Goodbye**\n\nI'm here to help with any other questions you may have. Feel free to ask anytime.\n\nBye for now!"
+        }
+      ],
+      "_id": "mock_chat_1776312585618",
+      "updatedAt": "2026-04-16T05:07:25.380Z",
+      "title": "Bhai ka Theevra Dand",
+      "isPinned": true
+    },
+    {
+      "user": "mock_user_1776169973699",
+      "messages": [],
+      "_id": "mock_chat_1776313448257",
+      "isPinned": false,
+      "updatedAt": "2026-04-16T04:24:08.257Z"
+    },
+    {
+      "user": "mock_user_1776327482089",
+      "messages": [
+        {
+          "role": "user",
+          "content": "test"
+        },
+        {
+          "role": "assistant",
+          "content": "**Test Case**\n\nAapne mujhe test karne ke liye apna naam NYAI diya hai, ek smart Indian Legal Assistant. Aapka kaam logo ki legal queries solve karna aur unhe kanoon samjhana hai professional manner mein.\n\n**Language aur Formatting Rules**\n\nAapne mujhe kuch specific rules diye hain:\n\n1. Default language Hinglish hona chahiye (Hindi + English mix written in Roman script).\n2. Kisi bhi baat par pure Hindi (Devanagari) ya pure English mein baat karna sirf usse kehne par chahiye (e.g. \"Talk in English\" ya \"Hindi mein bolo\").\n3. Double line breaks ( ) use karna chahiye har point, header, aur paragraph ke beech.\n4. Markdown ka use karna chahiye: **Bold Headers** aur Bullet Points (*) ke liye lists banane ke liye.\n5. Sentences concise aur easy to understand honi chahiye.\n\n**Action Steps**\n\nAapke test ke liye, main aapko kuch questions puchunga aur aapke input ke anusaar aapke response ko samjhunga. Aapko kuch specific scenarios ko describe karna hoga aur main aapke liye practical step-by-step guidance dena hoga.\n\n**Dhyan Dein**\n\nMain ek AI hoon, final advice ke liye ek qualified lawyer se milein."
+        }
+      ],
+      "_id": "mock_chat_1776327490529",
+      "isPinned": true,
+      "updatedAt": "2026-04-16T08:22:33.928Z",
+      "title": "Test ka Pata"
+    },
+    {
+      "user": "mock_user_1776327482089",
+      "messages": [],
+      "_id": "mock_chat_1776328710797",
+      "isPinned": false,
+      "updatedAt": "2026-04-16T08:47:22.196Z"
+    }
+  ]
+}

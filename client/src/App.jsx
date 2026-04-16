@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState, useCallback } from "react";
-import axios from "axios";
+import api from "./hooks/api";
 import Sidebar from "./components/Sidebar";
 import ChatWindow from "./components/ChatWindow";
 import { AuthPage } from "./pages/AuthPages";
@@ -16,7 +16,7 @@ function App() {
     if (!user) return;
     try {
       const config = { headers: { Authorization: `Bearer ${user.token}` } };
-      const { data } = await axios.get("/api/chats", config);
+      const { data } = await api.get("/chats", config);
       setSessions(data);
       if (data.length > 0 && !currentSessionId) setCurrentSessionId(data[0]._id);
     } catch (error) {
@@ -34,7 +34,7 @@ function App() {
   const handleNewSession = async () => {
     try {
       const config = { headers: { Authorization: `Bearer ${user.token}` } };
-      const { data } = await axios.post("/api/chats", {}, config);
+      const { data } = await api.post("/chats", {}, config);
       setSessions([data, ...sessions]);
       setCurrentSessionId(data._id);
     } catch (error) {
@@ -45,7 +45,7 @@ function App() {
   const handleTogglePin = async (id) => {
     try {
       const config = { headers: { Authorization: `Bearer ${user.token}` } };
-      const { data } = await axios.patch(`/api/chats/${id}/pin`, {}, config);
+      const { data } = await api.patch(`/chats/${id}/pin`, {}, config);
       setSessions((prev) => prev.map((s) => (s._id === id ? data : s)));
     } catch (error) {
       console.error(error);
@@ -57,7 +57,7 @@ function App() {
     if (!window.confirm("Are you sure you want to delete this chat?")) return;
     try {
       const config = { headers: { Authorization: `Bearer ${user.token}` } };
-      await axios.delete(`/api/chats/${id}`, config);
+      await api.delete(`/chats/${id}`, config);
       setSessions((prev) => prev.filter((s) => s._id !== id));
       if (currentSessionId === id) {
         setCurrentSessionId(null);

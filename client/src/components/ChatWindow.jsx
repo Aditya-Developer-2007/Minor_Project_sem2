@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useContext } from "react";
-import axios from "axios";
+import api from "../hooks/api";
 import { Send, Copy, Bot, Loader2, Paperclip } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import { AuthContext } from "../context/auth-context";
@@ -44,7 +44,7 @@ const ChatWindow = ({ currentSession, setSessions }) => {
 
     try {
       const config = { headers: { Authorization: `Bearer ${user.token}` } };
-      const { data } = await axios.post("/api/chats/message", {
+      const { data } = await api.post("/chats/message", {
         chatId: currentSession._id,
         content: userMsg.content,
       }, config);
@@ -72,7 +72,7 @@ const ChatWindow = ({ currentSession, setSessions }) => {
 
     try {
       const config = { headers: { Authorization: `Bearer ${user.token}`, "Content-Type": "multipart/form-data" } };
-      const { data } = await axios.post("/api/chats/upload", formData, config);
+      const { data } = await api.post("/chats/upload", formData, config);
       
       setSessions((prev) => prev.map(s => s._id === data._id ? data : s));
       setLocalMessages(data.messages);

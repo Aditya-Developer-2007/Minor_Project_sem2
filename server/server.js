@@ -8,7 +8,7 @@ const cors = require("cors");
 const app = express();
 
 app.use(cors({
-  origin: "https://your-frontend.vercel.app",
+  origin: process.env.FRONTEND_URL || "http://localhost:5173",
   credentials: true
 }));
 
@@ -16,8 +16,6 @@ const connectDB = require('./config/db');
 
 (async () => {
   await connectDB();
-  const app = express();
-  app.use(cors());
   app.use(express.json());
 
   // Simple Request Logger

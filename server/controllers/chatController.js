@@ -1,32 +1,57 @@
 const ChatData = require('../models/Chat');
 const MockDB = require('../utils/mockDb');
+const OpenAI = require('openai');
+const pdf = require('pdf-parse'); 
+const fs = require('fs');
+const path = require('path');
 
 const getChatModel = () => global.isMockDB ? MockDB.Chat : ChatData;
 
-const OpenAI = require('openai');
-// 1. pdf-parse ko require kiya (Ensure: npm install pdf-parse)
-const pdf = require('pdf-parse'); 
+const dataPath = path.join(__dirname, '../data/legal_data.json');
+let legalData = { precedents: [], bns_mappings: [], glossary: [] };
+try {
+  legalData = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
+} catch (e) { console.error("Could not load legal_data.json"); }
 
-// UNIVERSAL HINGLISH PROMPT
+// UNIVERSAL HINGLISH PROMPT (VERSION 5.2 - DYNAMIC LANGUAGE)
 const SYSTEM_PROMPT = `
 Tumhara naam NYAI hai, ek smart Indian Legal Assistant. 
-Tumhara kaam logo ki legal queries solve karna aur unhe kanoon samjhana hai professional manner mein.
 
-LANGUAGE RULES:
-1. DEFAULT LANGUAGE: ALWAYS talk in Hinglish (Hindi + English mix written in Roman script).
-2. LANGUAGE SWITCH: Only switch to pure Hindi (Devanagari) or pure English if the user explicitly asks for it (e.g. "Talk in English" or "Hindi mein bolo"). Otherwise, stick to Hinglish.
+LANGUAGE POLICY:
+1. DEFAULT: Hamesha Hinglish (Roman Hindi + English) ka use karein.
+2. DYNAMIC SWITCH: Agar user kahe "English mein batao" ya "Hindi mein likho", tabhi us specific language mein answer dein.
+3. STRUCTURE: Hamesha Dual-View JSON output dein (normal aur professional).
 
-STRICT FORMATTING RULES:
-1. ALWAYS use double line breaks (\n\n) between every point, header, and paragraph.
-2. Use Markdown: Use **Bold Headers** and Bullet Points (*) for lists.
-3. Keep sentences concise and easy to understand.
+STRICT JSON OUTPUT FORMAT:
+{
+  "normal": "Simple explanation here...",
+  "professional": "Detailed legal analysis here...",
+  "suggested_sections": ["BNS 101", "IPC 302"]
+}
 
-RESPONSE STRUCTURE (PROPER MANNER):
-- **Summary**: User ki situation ka short overview.
-- **Legal Context**: Relevant Sections (BNS, IPC, Constitution) cite karo.
-- **Action Steps**: User ke liye practical step-by-step guidance.
-- **Dhyan Dein**: End mein likho "Main ek AI hoon, final advice ke liye ek qualified lawyer se milein."
+IMPORTANT: Provide ONLY the JSON. No conversational filler outside the JSON.
 `;
+
+const contextSearch = (query) => {
+    const term = query.toLowerCase();
+    const matches = [];
+    
+    // Search BNS mappings
+    legalData.bns_mappings.forEach(m => {
+        if (term.includes(m.ipc) || term.includes(m.bns) || term.includes(m.offense.toLowerCase())) {
+            matches.push(`IPC ${m.ipc} is now BNS ${m.bns} (${m.offense}). Change: ${m.change}`);
+        }
+    });
+
+    // Search Precedents
+    legalData.precedents.forEach(p => {
+        if (p.keywords.some(k => term.includes(k.toLowerCase())) || p.title.toLowerCase().includes(term)) {
+            matches.push(`PRECEDENT: ${p.title}. Ratio: ${p.professional_analysis}`);
+        }
+    });
+
+    return matches.slice(0, 3).join("\n");
+};
 
 const createSession = async (req, res) => {
   try {
@@ -48,7 +73,6 @@ const sendMessage = async (req, res) => {
   const { chatId, content } = req.body;
 
   try {
-    // 2. Initialization ko function ke andar rakha taaki credentials crash na ho
     const openai = new OpenAI({ 
       apiKey: process.env.GROQ_API_KEY, 
       baseURL: "https://api.groq.com/openai/v1", 
@@ -57,13 +81,18 @@ const sendMessage = async (req, res) => {
     const chat = await getChatModel().findOne({ _id: chatId, user: req.user._id });
     if (!chat) return res.status(404).json({ message: 'Chat not found' });
 
+    // Step 1: Context Retrieval (RAG-lite)
+    const context = contextSearch(content);
+    
     chat.messages.push({ role: 'user', content });
 
-    // AI Response with Llama 3.1
+    // Step 2: AI Response with Context
     const completion = await openai.chat.completions.create({
-      model: "llama-3.1-8b-instant", 
+      model: "llama-3.1-8b-instant",
+      response_format: { type: "json_object" },
       messages: [
         { role: "system", content: SYSTEM_PROMPT },
+        { role: "system", content: `GROUND TRUTH CONTEXT FROM LEGAL_DATA.JSON:\n${context || "No specific matches found."}` },
         ...chat.messages.map(m => ({ role: m.role, content: m.content }))
       ],
       temperature: 0.1, 
@@ -72,7 +101,7 @@ const sendMessage = async (req, res) => {
     const aiResponse = completion.choices[0].message.content;
     chat.messages.push({ role: 'assistant', content: aiResponse });
 
-    // Title Generation for Sidebar
+    // Title Generation
     if (chat.messages.length <= 2) {
        try {
          const titleGen = await openai.chat.completions.create({
@@ -104,20 +133,15 @@ const uploadPDF = async (req, res) => {
 const deleteSession = async (req, res) => {
   try {
     const Chat = getChatModel();
-    // Verify ownership before deleting
     let chat;
     if (global.isMockDB) {
       chat = await Chat.findByIdAndDelete(req.params.id);
     } else {
       chat = await Chat.findOneAndDelete({ _id: req.params.id, user: req.user._id });
     }
-    
-    if (!chat) return res.status(404).json({ message: "Chat not found or unauthorized" });
-    res.json({ message: "Chat deleted successfully" });
-  } catch (error) { 
-    console.error("Delete Session Error:", error);
-    res.status(500).json({ message: error.message }); 
-  }
+    if (!chat) return res.status(404).json({ message: "Chat not found" });
+    res.json({ message: "Chat deleted" });
+  } catch (error) { res.status(500).json({ message: error.message }); }
 };
 
 const togglePinSession = async (req, res) => {
@@ -125,8 +149,6 @@ const togglePinSession = async (req, res) => {
     const Chat = getChatModel();
     const chat = await Chat.findOne({ _id: req.params.id, user: req.user._id });
     if (!chat) return res.status(404).json({ message: "Chat not found" });
-    
-    // Support both Mongoose and MockDB
     const isPinned = !chat.isPinned;
     if (global.isMockDB) {
       await Chat.findByIdAndUpdate(req.params.id, { isPinned });
@@ -134,10 +156,33 @@ const togglePinSession = async (req, res) => {
       chat.isPinned = isPinned;
       await chat.save();
     }
-    
     const updatedChat = await Chat.findOne({ _id: req.params.id, user: req.user._id });
     res.json(updatedChat);
   } catch (error) { res.status(500).json({ message: error.message }); }
 };
 
-module.exports = { createSession, getSessions, sendMessage, uploadPDF, deleteSession, togglePinSession };
+const saveBriefAsChat = async (req, res) => {
+  const { summary, fileName } = req.body;
+  try {
+    const Chat = getChatModel();
+    // Wrap summary in the standard JSON format so ChatWindow can render it
+    const formattedContent = JSON.stringify({
+      normal: summary,
+      professional: `### Comprehensive Legal Brief\n\n${summary}`,
+      suggested_sections: []
+    });
+
+    const chat = await Chat.create({
+      user: req.user._id,
+      title: fileName ? `Brief: ${fileName}` : "Legal Brief",
+      messages: [
+        { role: 'assistant', content: formattedContent }
+      ]
+    });
+    res.status(201).json(chat);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+module.exports = { createSession, getSessions, sendMessage, uploadPDF, deleteSession, togglePinSession, saveBriefAsChat };

@@ -11,6 +11,30 @@
       "email": "test1@test.com",
       "password": "password",
       "_id": "mock_user_1776327482089"
+    },
+    {
+      "name": "Test User",
+      "email": "test@example.com",
+      "password": "Password123!",
+      "_id": "mock_user_1776361949386"
+    },
+    {
+      "name": "Tester",
+      "email": "test_jetski@example.com",
+      "password": "password123password123",
+      "_id": "mock_user_1776694892641"
+    },
+    {
+      "name": "New User",
+      "email": "newuser@example.com",
+      "password": "password123",
+      "_id": "mock_user_1776695975101"
+    },
+    {
+      "name": "aadii",
+      "email": "aditya@gmail.com",
+      "password": "123456789",
+      "_id": "mock_user_1776707581737"
     }
   ],
   "chats": [
@@ -167,6 +191,198 @@
       "_id": "mock_chat_1776328710797",
       "isPinned": false,
       "updatedAt": "2026-04-16T08:47:22.196Z"
+    },
+    {
+      "user": "mock_user_1776695975101",
+      "messages": [
+        {
+          "role": "user",
+          "content": "hi"
+        },
+        {
+          "role": "assistant",
+          "content": "**Namaste!**\n\nAap kaise hain? Aapke paas koi legal query hai ya aapko kanoon ke bare mein jankari chahiye?\n\n**Meri yehi yojana hai:**\n\n- Aapke paas koi sawal hai, toh main uska uttar dena.\n- Aapko kanoon ke bare mein samjhna.\n- Aapke liye practical action steps provide karna.\n\n**Kya aapke paas koi sawal hai?**"
+        },
+        {
+          "role": "user",
+          "content": "can we talk in hinglish"
+        },
+        {
+          "role": "assistant",
+          "content": "**Bilkul!**\n\nAapke saath Hinglish mein baat karna pasand hai. Main aapko kanoon ke bare mein samjhne ke liye taiyar hoon.\n\n**Kya aapke paas koi sawal hai?**"
+        },
+        {
+          "role": "user",
+          "content": "yes can u tell me abt driving licence importance in english"
+        },
+        {
+          "role": "assistant",
+          "content": "**Driving Licence ka Mahatva**\n\nA driving licence ek zaroori document hai jo aapko vehicle chalane ka adhikar deta hai. Yeh document aapke liye bahut mahatvapurn hai, kyunki yeh aapko traffic rules follow karne aur public safety ke liye responsible banata hai.\n\n**Driving Licence ke Faida**\n\n* Aapko vehicle chalane ka adhikar deta hai.\n* Aapko traffic rules follow karne aur public safety ke liye responsible banata hai.\n* Aapko insurance claim karne ka adhikar deta hai.\n* Aapko vehicle ki maintenance karne ka adhikar deta hai.\n\n**Driving Licence ke Tarike**\n\n* Aapko driving school se driving training lena hoga.\n* Aapko driving test pass karna hoga.\n* Aapko driving licence apply karna hoga.\n* Aapko driving licence fee pay karna hoga.\n\n**Dhyan Dein**\n\nMain ek AI hoon, final advice ke liye ek qualified lawyer se milein."
+        }
+      ],
+      "_id": "mock_chat_1776696021288",
+      "isPinned": false,
+      "updatedAt": "2026-04-20T14:40:21.288Z",
+      "title": "Namaste, Hello Dear Friend"
+    },
+    {
+      "user": "mock_user_1776361949386",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Murder punishment kya hai naye kanoon mein?"
+        },
+        {
+          "role": "assistant",
+          "content": "**Murder Punishment ka Naya Kanoon**\n\nMurder punishment ke bare mein naye kanoon mein kuchh badlav aaye hain. \n\n**Summary**\nMurder ka case India mein IPC (Indian Penal Code) ke Section 302 ke under aaya jata hai. Naye kanoon mein, murder punishment ke liye kuchh badlav kiye gaye hain.\n\n**Legal Context**\nIPC Section 302 ke under, murder punishment 20 saal se lekar kaatil ki zindagi ki saza tak ho sakti hai. Naye kanoon mein, Supreme Court ne kaha hai ki murder punishment ko 20 saal se lekar 30 saal tak kar diya ja sakta hai.\n\n**Action Steps**\nAgar aapko murder punishment ke bare mein koi samasya hai, to aapko:\n\n1. Police ko complaint darj karne ki zaroorat hai.\n2. Court mein case file karne ki zaroorat hai.\n3. Ek qualified lawyer se sampark karein, unhein apne case ke bare mein batayein.\n\n**Dhyan Dein**\nMain ek AI hoon, final advice ke liye ek qualified lawyer se milein."
+        }
+      ],
+      "_id": "mock_chat_1776697452572",
+      "isPinned": false,
+      "updatedAt": "2026-04-20T15:04:12.572Z",
+      "title": "Murder ka naya Dhanak."
+    },
+    {
+      "user": "mock_user_1776361949386",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Theft punishment kya hai BNS mein?"
+        },
+        {
+          "role": "assistant",
+          "content": "{\n  \"normal\": \"Theft punishment BNS mein 3 saal tak ki jail aur 1 lakh rupaye tak ka fine ho sakta hai.\",\n   \"professional\": \"### Theft Punishment under BNS\\n\\n**Statutory Context**: Section BNS 303\\n\\n**Punishment**: Imprisonment for a term not exceeding 3 years and/or fine not exceeding 1 lakh rupees.\",\n   \"suggested_sections\": [\"BNS 303\"]\n}"
+        }
+      ],
+      "_id": "mock_chat_1776698651922",
+      "isPinned": false,
+      "updatedAt": "2026-04-20T15:24:11.922Z",
+      "title": "Kanoon ka Baddha Neta"
+    },
+    {
+      "user": "mock_user_1776361949386",
+      "messages": [
+        {
+          "role": "user",
+          "content": "New theft law content?"
+        },
+        {
+          "role": "assistant",
+          "content": "{\n  \"normal\": \"Naya chori ka kanoon: Agar aapne kisi ke ghar ya dukan se kuch chhoda hai, to aapko IPC 303 ke under 3 saal tak ke liye jaile ja sakte hain.\",\n   \"professional\": \"### Naya Chori Ka Kanoon\\n\\n**Statutory Context**: BNS 303 (Theft)\\n\\n**Precedents**: IPC 302 (Criminal Breach of Trust) aur IPC 304 (Punishment for Culpable Homicide) ke alawa, ab kisi ke ghar ya dukan se kuch chhoda to aapko 3 saal tak ke liye jaile ja sakte hain.\",\n   \"suggested_sections\": [\"BNS 303\", \"IPC 302\", \"IPC 304\"]\n}"
+        }
+      ],
+      "_id": "mock_chat_1776700377625",
+      "isPinned": false,
+      "updatedAt": "2026-04-20T15:52:57.625Z",
+      "title": "Nayi Loot Ka Niyam."
+    },
+    {
+      "user": "mock_user_1776361949386",
+      "messages": [],
+      "_id": "mock_chat_1776700543317",
+      "isPinned": false,
+      "updatedAt": "2026-04-20T15:55:43.317Z"
+    },
+    {
+      "user": "mock_user_1776361949386",
+      "messages": [],
+      "_id": "mock_chat_1776700560670",
+      "isPinned": false,
+      "updatedAt": "2026-04-20T15:56:00.670Z"
+    },
+    {
+      "user": "mock_user_1776361949386",
+      "messages": [],
+      "_id": "mock_chat_1776700593095",
+      "isPinned": false,
+      "updatedAt": "2026-04-20T15:56:33.095Z"
+    },
+    {
+      "user": "mock_user_1776361949386",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is the punishment for murder?"
+        },
+        {
+          "role": "assistant",
+          "content": "{\n  \"normal\": \"Murder ka punishment Death ya Life Imprisonment hai.\",\n   \"professional\": \"### Legal Analysis\\n\\n**Statutory Context**: BNS 101 (Murder)\\n\\n**Punishment**: Death or Life Imprisonment as per Section 101 of the BNS Act.\",\n   \"suggested_sections\": [\"BNS 101\"]\n}"
+        }
+      ],
+      "_id": "mock_chat_1776700657820",
+      "isPinned": false,
+      "updatedAt": "2026-04-20T15:57:37.820Z",
+      "title": "Qatl Ka Badi Jald \n('Qatl' means 'murder' in Hindi, 'Ka Badi Jald' means 'Its very soon punishment'.)"
+    },
+    {
+      "user": "mock_user_1776361949386",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is the punishment for murder?"
+        },
+        {
+          "role": "assistant",
+          "content": "{\n  \"normal\": \"Murder ka punishment Death ya Life Imprisonment hai.\",\n   \"professional\": \"### Legal Analysis\\n\\n**Statutory Context**: BNS 101 (Murder)\\n\\n**Punishment**: Death or Life Imprisonment as per Section 101 of the BNS Act.\",\n   \"suggested_sections\": [\"BNS 101\"]\n}"
+        }
+      ],
+      "_id": "mock_chat_1776700709270",
+      "isPinned": false,
+      "updatedAt": "2026-04-20T15:58:29.270Z",
+      "title": "Maut Ki Kabri Nazar"
+    },
+    {
+      "user": "mock_user_1776361949386",
+      "messages": [],
+      "_id": "mock_chat_1776700823359",
+      "isPinned": false,
+      "updatedAt": "2026-04-20T16:00:23.359Z"
+    },
+    {
+      "user": "mock_user_1776361949386",
+      "messages": [],
+      "_id": "mock_chat_1776700857175",
+      "isPinned": false,
+      "updatedAt": "2026-04-20T16:00:57.175Z"
+    },
+    {
+      "user": "mock_user_1776361949386",
+      "messages": [],
+      "_id": "mock_chat_1776700909754",
+      "isPinned": false,
+      "updatedAt": "2026-04-20T16:01:49.754Z"
+    },
+    {
+      "user": "mock_user_1776361949386",
+      "messages": [],
+      "_id": "mock_chat_1776700955467",
+      "isPinned": false,
+      "updatedAt": "2026-04-20T16:02:35.467Z"
+    },
+    {
+      "user": "mock_user_1776361949386",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Murder punishment kya hai?"
+        },
+        {
+          "role": "assistant",
+          "content": "{\n  \"normal\": \"Murder ka punishment Death ya Life Imprisonment hai.\",\n   \"professional\": \"### Legal Analysis\\n\\n**Statutory Context**: BNS 101 (Murder)\\n\\n**Punishment**: Death or Life Imprisonment as per Section 101 of the BNS Act.\",\n   \"suggested_sections\": [\"BNS 101\"]\n}"
+        },
+        {
+          "role": "user",
+          "content": "Tell me about it in English"
+        },
+        {
+          "role": "assistant",
+          "content": "{\n  \"normal\": \"The punishment for murder is either death or life imprisonment.\",\n   \"professional\": \"### Legal Analysis\\n\\n**Statutory Context**: Section 302 of the Indian Penal Code (IPC)\\n\\n**Punishment**: Death or Life Imprisonment as per Section 302 of the IPC.\",\n   \"suggested_sections\": [\"IPC 302\"]\n}"
+        }
+      ],
+      "_id": "mock_chat_1776701013380",
+      "isPinned": false,
+      "updatedAt": "2026-04-20T16:03:33.380Z",
+      "title": "Qatl ki sabse Bharat."
     }
   ]
 }

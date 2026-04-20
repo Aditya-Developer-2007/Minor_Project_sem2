@@ -2,12 +2,21 @@ import { useContext, useEffect, useState, useCallback } from "react";
 import api from "./hooks/api";
 import Sidebar from "./components/Sidebar";
 import ChatWindow from "./components/ChatWindow";
+import Header from "./components/Header";
+import HomeDashboard from "./components/HomeDashboard";
+import { ToolContext } from "./context/ToolContext";
 import { AuthPage } from "./pages/AuthPages";
 import { AuthContext } from "./context/auth-context";
 import LandingPage from "./pages/LandingPage";
 
+// Tools
+import CaseBriefGenerator from "./components/tools/CaseBriefGenerator";
+import PrecedentSearch from "./components/tools/PrecedentSearch";
+import LawMapper from "./components/tools/LawMapper";
+
 function App() {
   const { user, logout } = useContext(AuthContext);
+  const { activeTool, resetTool } = useContext(ToolContext);
   const [sessions, setSessions] = useState([]);
   const [currentSessionId, setCurrentSessionId] = useState(null);
   const [showLanding, setShowLanding] = useState(true);
@@ -18,15 +27,13 @@ function App() {
       const config = { headers: { Authorization: `Bearer ${user.token}` } };
       const { data } = await api.get("/chats", config);
       setSessions(data);
-      if (data.length > 0 && !currentSessionId) setCurrentSessionId(data[0]._id);
     } catch (error) {
       console.error(error);
     }
-  }, [user, currentSessionId]);
+  }, [user]);
 
   useEffect(() => {
     if (user) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
       fetchSessions();
     }
   }, [user, fetchSessions]);
@@ -37,6 +44,7 @@ function App() {
       const { data } = await api.post("/chats", {}, config);
       setSessions([data, ...sessions]);
       setCurrentSessionId(data._id);
+      resetTool(); // Ensure we switch to chat view
     } catch (error) {
       console.error(error);
     }
@@ -53,7 +61,6 @@ function App() {
   };
 
   const handleDeleteSession = useCallback(async (id) => {
-    console.log("handleDeleteSession called with id:", id);
     if (!window.confirm("Are you sure you want to delete this chat?")) return;
     try {
       const config = { headers: { Authorization: `Bearer ${user.token}` } };
@@ -72,9 +79,26 @@ function App() {
     setSessions([]);
     setCurrentSessionId(null);
     setShowLanding(true);
+    resetTool();
   };
 
-  const currentSession = sessions.find((s) => s._id === currentSessionId);
+  const renderContent = () => {
+    if (activeTool) {
+        switch(activeTool) {
+            case 'brief': return <CaseBriefGenerator onBriefSaved={fetchSessions} />;
+            case 'search': return <PrecedentSearch />;
+            case 'mapper': return <LawMapper />;
+            default: return <HomeDashboard onNewChat={handleNewSession} />;
+        }
+    }
+
+    const currentSession = sessions.find((s) => s._id === currentSessionId);
+    if (currentSessionId && currentSession) {
+        return <ChatWindow currentSession={currentSession} setSessions={setSessions} />;
+    }
+
+    return <HomeDashboard onNewChat={handleNewSession} />;
+  };
 
   if (!user) {
     if (showLanding) {
@@ -84,7 +108,7 @@ function App() {
   }
 
   return (
-    <div className="flex h-screen overflow-hidden">
+    <div className="flex h-screen bg-[#09090b] text-gray-100 overflow-hidden font-sans selection:bg-blue-500/30 selection:text-blue-200">
       <Sidebar 
         sessions={sessions} 
         currentSessionId={currentSessionId}
@@ -94,10 +118,12 @@ function App() {
         onPin={handleTogglePin}
         onDelete={handleDeleteSession}
       />
-      <ChatWindow 
-        currentSession={currentSession} 
-        setSessions={setSessions}
-      />
+      <div className="flex-1 flex flex-col min-w-0 relative h-full">
+        <Header />
+        <main className="flex-1 overflow-hidden relative">
+            {renderContent()}
+        </main>
+      </div>
     </div>
   );
 }

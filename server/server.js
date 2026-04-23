@@ -2,11 +2,34 @@ const express = require('express');
 const dotenv = require('dotenv');
 const path = require('path');
 const cors = require("cors");
+const helmet = require("helmet");
+const rateLimit = require("express-rate-limit");
 const connectDB = require('./config/db');
 
 dotenv.config({ path: path.resolve(__dirname, '.env') });
 
+// Environment Validation
+const REQUIRED_ENV = ['GROQ_API_KEY', 'JWT_SECRET'];
+REQUIRED_ENV.forEach(env => {
+  if (!process.env[env]) {
+    console.error(`❌ CRITICAL: ${env} is missing in .env file`);
+    process.exit(1);
+  }
+});
+
 const app = express();
+
+// Security Middleware
+app.use(helmet());
+app.use(express.json());
+
+// Rate Limiting
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // Limit each IP to 100 requests per windowMs
+  message: { message: "Too many requests from this IP, please try again after 15 minutes" }
+});
+app.use("/api/", limiter);
 
 // Robust CORS configuration
 const allowedOrigin = process.env.FRONTEND_URL || "http://localhost:5173";
@@ -16,8 +39,6 @@ app.use(cors({
   origin: [normalizedOrigin, "http://localhost:5173", "http://localhost:5174", "http://localhost:3000"],
   credentials: true
 }));
-
-app.use(express.json());
 
 // Simple Request Logger
 app.use((req, res, next) => {
@@ -39,7 +60,10 @@ connectDB().catch(err => console.error("Database connection failed:", err));
 // Global Error Handler
 app.use((err, req, res, next) => {
   console.error("Express Error:", err);
-  res.status(500).json({ message: "Internal Server Error", error: err.message });
+  res.status(500).json({ 
+    message: "Internal Server Error", 
+    error: process.env.NODE_ENV === 'development' ? err.message : "Something went wrong" 
+  });
 });
 
 const PORT = process.env.PORT || 5000;
@@ -55,3 +79,4 @@ process.on('unhandledRejection', (reason, promise) => {
 process.on('uncaughtException', (err) => {
   console.error('Uncaught Exception:', err);
 });
+

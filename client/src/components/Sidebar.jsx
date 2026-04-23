@@ -1,4 +1,4 @@
-import { Plus, LogOut, Home, Globe, Trash2, Pin, Briefcase, Search, Languages, MessageSquare } from "lucide-react";
+import { Plus, LogOut, Home, Globe, Trash2, Pin, Briefcase, Search, Languages, MessageSquare, ShieldAlert } from "lucide-react";
 import { useContext } from "react";
 import { AuthContext } from "../context/auth-context";
 import { ToolContext } from "../context/ToolContext";
@@ -135,7 +135,16 @@ const Sidebar = ({ sessions, currentSessionId, onSelectSession, onNewSession, on
           </div>
         </div>
         
+        <button
+            onClick={() => { localStorage.removeItem('nyai_disclaimer_accepted'); window.location.reload(); }}
+            className="w-full flex items-center gap-2 px-3 py-2 text-[11px] font-bold text-gray-500 hover:text-white uppercase tracking-widest transition-all mb-4 group"
+        >
+            <ShieldAlert size={14} className="group-hover:text-amber-500 transition-colors" />
+            Legal Disclaimer
+        </button>
+
         <div className="flex gap-2">
+
             <button
                 onClick={onLogout}
                 className="flex-1 flex items-center justify-center gap-2 bg-white/5 hover:bg-red-500/10 text-gray-400 hover:text-red-400 py-2.5 rounded-lg transition-all text-xs font-medium border border-transparent hover:border-red-500/20"

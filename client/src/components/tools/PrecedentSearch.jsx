@@ -7,34 +7,43 @@ import { AuthContext } from '../../context/auth-context';
 const PrecedentSearch = () => {
     const { user } = useContext(AuthContext);
     const [query, setQuery] = useState('');
+    const [allPrecedents, setAllPrecedents] = useState([]);
     const [results, setResults] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
 
-    // Live Search with Debounce
+    // Initial Load
     useEffect(() => {
-        const delayDebounceFn = setTimeout(() => {
-            if (query.trim().length > 2) {
-                performSearch();
-            } else if (query.length === 0) {
-                setResults([]);
-            }
-        }, 300);
+        fetchAllPrecedents();
+    }, []);
 
-        return () => clearTimeout(delayDebounceFn);
-    }, [query]);
-
-    const performSearch = async () => {
+    const fetchAllPrecedents = async () => {
         setIsLoading(true);
         try {
             const config = { headers: { Authorization: `Bearer ${user.token}` } };
-            const { data } = await api.post('/tools/search', { query }, config);
+            // Empty query returns all results from the backend now
+            const { data } = await api.post('/tools/search', { query: "" }, config);
+            setAllPrecedents(data.results);
             setResults(data.results);
         } catch (error) {
-            console.error("Search failed:", error);
+            console.error("Fetch failed:", error);
         } finally {
             setIsLoading(false);
         }
     };
+
+    // Live Filtering
+    useEffect(() => {
+        if (query.trim().length === 0) {
+            setResults(allPrecedents);
+        } else {
+            const filtered = allPrecedents.filter(p => 
+                p.title.toLowerCase().includes(query.toLowerCase()) ||
+                p.keywords.some(k => k.toLowerCase().includes(query.toLowerCase())) ||
+                p.professional_analysis.toLowerCase().includes(query.toLowerCase())
+            );
+            setResults(filtered);
+        }
+    }, [query, allPrecedents]);
 
     return (
         <div className="h-full flex flex-col bg-[#09090b] text-gray-100 p-4 md:p-8 overflow-hidden">

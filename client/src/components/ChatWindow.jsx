@@ -3,7 +3,6 @@ import api from "../hooks/api";
 import { Send, Copy, Bot, Loader2, Paperclip, User, Sparkles, CheckCircle2, Layout, BookOpen } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import { AuthContext } from "../context/auth-context";
-import Typewriter from "./TypewriterEffect";
 import { motion, AnimatePresence } from "framer-motion";
 import toast from "react-hot-toast";
 
@@ -13,6 +12,9 @@ const ChatWindow = ({ currentSession, setSessions }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [localMessages, setLocalMessages] = useState([]);
   const [viewMode, setViewMode] = useState("normal"); // 'normal' or 'pro'
+  const [pendingPdfText, setPendingPdfText] = useState(null);
+  const [isUploading, setIsUploading] = useState(false);
+  
   const messagesEndRef = useRef(null);
   const fileInputRef = useRef(null);
 
@@ -35,55 +37,125 @@ const ChatWindow = ({ currentSession, setSessions }) => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [localMessages]);
 
+  const handleFileUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    setIsUploading(true);
+    const formData = new FormData();
+    formData.append('pdf', file);
+
+    try {
+        const config = { headers: { Authorization: `Bearer ${user.token}` } };
+        const { data } = await api.post("/chats/upload", formData, config);
+        setPendingPdfText(data.text);
+        toast.success(`Context Loaded: ${file.name}`);
+    } catch (error) {
+        toast.error("Failed to process PDF");
+        console.error(error);
+    } finally {
+        setIsUploading(false);
+    }
+  };
+
   const handleSend = async (e) => {
     e.preventDefault();
-    if (!input.trim()) return;
+    if (!input.trim() && !pendingPdfText) return;
 
     const userMsg = { role: "user", content: input };
-    setLocalMessages((prev) => [...prev, userMsg]);
+    const tempMessages = [...localMessages, userMsg];
+    setLocalMessages(tempMessages);
     setInput("");
     setIsLoading(true);
 
     try {
-      const config = { headers: { Authorization: `Bearer ${user.token}` } };
-      const { data } = await api.post("/chats/message", {
-        chatId: currentSession._id,
-        content: userMsg.content,
-      }, config);
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/chats/message`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${user.token}`
+        },
+        body: JSON.stringify({
+          chatId: currentSession._id,
+          content: pendingPdfText ? `CONTEXT FROM UPLOADED PDF:\n${pendingPdfText}\n\nUSER QUESTION: ${userMsg.content}` : userMsg.content,
+          stream: true
+        })
+      });
+
+      setPendingPdfText(null);
       
-      setSessions((prev) => prev.map(s => s._id === data._id ? data : s));
-      setLocalMessages(data.messages);
+      if (!response.ok) throw new Error("Stream failed");
+
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let assistantResponse = "";
+      
+      setLocalMessages(prev => [...prev, { role: "assistant", content: "" }]);
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        const chunk = decoder.decode(value);
+        const lines = chunk.split("\n");
+
+        for (const line of lines) {
+          if (line.startsWith("data: ")) {
+            const dataStr = line.slice(6).trim();
+            if (dataStr === "[DONE]") break;
+            
+            try {
+              const data = JSON.parse(dataStr);
+              if (data.content) {
+                assistantResponse += data.content;
+                setLocalMessages(prev => {
+                  const newMsgs = [...prev];
+                  newMsgs[newMsgs.length - 1].content = assistantResponse;
+                  return newMsgs;
+                });
+              }
+            } catch (e) {}
+          }
+        }
+      }
+      
+      const { data } = await api.get(`/chats`, { headers: { Authorization: `Bearer ${user.token}` } });
+      const updatedSession = data.find(s => s._id === currentSession._id);
+      if (updatedSession) {
+        setSessions(data);
+        setLocalMessages(updatedSession.messages);
+      }
+
     } catch (error) {
-      toast.error("Network issue. Please try again.");
-      console.error("Error sending message", error);
+      toast.error("AI Service Error");
+      console.error(error);
     } finally {
       setIsLoading(false);
     }
   };
 
   const copyToClipboard = (text) => {
-    navigator.clipboard.writeText(text);
+    let toCopy = text;
+    try {
+        const parsed = JSON.parse(text);
+        toCopy = viewMode === 'normal' ? parsed.normal : parsed.professional;
+    } catch(e) {}
+    navigator.clipboard.writeText(toCopy);
     toast.success("Advice copied!");
   };
 
-  const MessageContent = ({ content, mode, isLatest }) => {
+  const MessageContent = ({ content, mode }) => {
     let mainContent = content;
-    let isJson = false;
     try {
-        const parsed = JSON.parse(content);
-        mainContent = mode === 'normal' ? parsed.normal : parsed.professional;
-        isJson = true;
-    } catch (e) {
-        // Not JSON, use as is
-    }
+        if (content.trim().startsWith('{')) {
+            const parsed = JSON.parse(content);
+            mainContent = mode === 'normal' ? (parsed.normal || "") : (parsed.professional || "");
+        }
+    } catch (e) {}
 
     return (
         <div className="prose prose-invert max-w-none prose-p:leading-7 prose-li:marker:text-blue-500 prose-strong:text-blue-400 prose-headings:text-white prose-headings:mb-2 text-sm md:text-[15px]">
-            {isLatest && !isJson ? (
-                <Typewriter text={mainContent} speed={2} />
-            ) : (
-                <ReactMarkdown>{mainContent}</ReactMarkdown>
-            )}
+            <ReactMarkdown>{mainContent}</ReactMarkdown>
         </div>
     );
   };
@@ -91,7 +163,6 @@ const ChatWindow = ({ currentSession, setSessions }) => {
   return (
     <div className="flex-1 flex flex-col h-full bg-[#09090b] relative text-gray-100 font-sans">
       
-      {/* Top Controller for View Mode */}
       {localMessages.length > 0 && (
           <div className="absolute top-4 left-1/2 -translate-x-1/2 z-20 flex bg-[#111111]/80 backdrop-blur-xl border border-white/5 p-1 rounded-2xl shadow-2xl overflow-hidden">
                 <button 
@@ -111,7 +182,7 @@ const ChatWindow = ({ currentSession, setSessions }) => {
           </div>
       )}
 
-      <div className={`flex-1 overflow-y-auto p-4 sm:p-8 custom-scrollbar ${localMessages.length === 0 ? 'flex flex-col justify-center' : 'space-y-12 pt-20 pb-32'}`}>
+      <div className={`flex-1 overflow-y-auto p-4 sm:p-8 custom-scrollbar ${localMessages.length === 0 ? 'flex flex-col justify-center' : 'space-y-12 pt-20 pb-40'}`}>
         {localMessages.length === 0 && (
           <div className="w-full max-w-3xl mx-auto space-y-10 animate-fadeIn">
             <div className="text-center space-y-4">
@@ -162,11 +233,7 @@ const ChatWindow = ({ currentSession, setSessions }) => {
                   
                   {msg.role === "assistant" ? (
                     <div className="space-y-4">
-                        <MessageContent 
-                            content={msg.content} 
-                            mode={viewMode} 
-                            isLatest={idx === localMessages.length - 1} 
-                        />
+                        <MessageContent content={msg.content} mode={viewMode} />
                         <div className="flex items-center justify-between pt-5 border-t border-white/5">
                             <div className="flex items-center gap-1.5">
                                 <div className={`w-1.5 h-1.5 rounded-full ${viewMode === 'pro' ? 'bg-indigo-500' : 'bg-blue-500'}`}></div>
@@ -219,7 +286,6 @@ const ChatWindow = ({ currentSession, setSessions }) => {
         <div ref={messagesEndRef} className="h-10" />
       </div>
 
-      {/* Modern Floating Input Area */}
       <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-[#09090b] via-[#09090b]/95 to-transparent z-10">
         <form onSubmit={handleSend} className="relative max-w-4xl mx-auto group">
           <div className="absolute inset-0 bg-blue-600/5 blur-3xl group-focus-within:bg-blue-600/10 transition-all rounded-3xl"></div>
@@ -229,39 +295,45 @@ const ChatWindow = ({ currentSession, setSessions }) => {
             ref={fileInputRef} 
             className="hidden" 
             accept="application/pdf" 
-            onChange={(e) => {
-                const file = e.target.files[0];
-                if (file) toast.success(`Case Material Loaded: ${file.name}`);
-            }} 
+            onChange={handleFileUpload} 
           />
           
           <div className="relative flex items-center bg-[#111111]/80 backdrop-blur-2xl border border-white/10 rounded-[28px] focus-within:border-blue-500/50 shadow-2xl transition-all h-[4.5rem] px-3">
             <button 
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
+                disabled={isUploading}
                 className="p-4 text-gray-500 hover:text-blue-400 transition-colors disabled:opacity-50"
                 title="Upload Case PDF"
             >
-                <Paperclip size={24} />
+                {isUploading ? <Loader2 size={24} className="animate-spin" /> : <Paperclip size={24} />}
             </button>
 
             <input
                 type="text"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                placeholder="Analyze theft punishment in BNS..."
+                placeholder={pendingPdfText ? "Ask about the uploaded PDF..." : "Analyze theft punishment in BNS..."}
                 className="flex-1 bg-transparent text-gray-100 px-4 outline-none text-lg placeholder-gray-600 font-medium"
                 disabled={isLoading}
             />
             
             <button 
                 type="submit" 
-                disabled={!input.trim() || isLoading}
+                disabled={(!input.trim() && !pendingPdfText) || isLoading}
                 className="w-14 h-14 flex items-center justify-center bg-white text-black rounded-full hover:bg-blue-50 disabled:opacity-20 disabled:hover:bg-white transition-all shadow-xl active:scale-95 group/btn"
             >
                 <Send size={24} className="group-hover:rotate-12 transition-transform" fill="currentColor" />
             </button>
           </div>
+          
+          {pendingPdfText && (
+              <div className="absolute -top-10 left-4 bg-blue-600 text-white text-[10px] font-bold px-3 py-1 rounded-full flex items-center gap-2 shadow-lg animate-bounce">
+                  <Sparkles size={10} />
+                  PDF Context Active
+              </div>
+          )}
+
           <div className="flex justify-center gap-6 mt-4 text-[10px] text-gray-600 font-black uppercase tracking-[0.2em]">
             <span className="flex items-center gap-2"><CheckCircle2 size={12} className="text-emerald-500" /> BNS 2023</span>
             <span className="flex items-center gap-2"><Layout size={12} className="text-indigo-500" /> Dual-Perspective</span>

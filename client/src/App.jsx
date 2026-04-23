@@ -8,6 +8,8 @@ import { ToolContext } from "./context/ToolContext";
 import { AuthPage } from "./pages/AuthPages";
 import { AuthContext } from "./context/auth-context";
 import LandingPage from "./pages/LandingPage";
+import DisclaimerModal from "./components/DisclaimerModal";
+
 
 // Tools
 import CaseBriefGenerator from "./components/tools/CaseBriefGenerator";
@@ -109,6 +111,7 @@ function App() {
 
   return (
     <div className="flex h-screen bg-[#09090b] text-gray-100 overflow-hidden font-sans selection:bg-blue-500/30 selection:text-blue-200">
+      <DisclaimerModal />
       <Sidebar 
         sessions={sessions} 
         currentSessionId={currentSessionId}

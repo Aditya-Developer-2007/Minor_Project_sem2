@@ -1,14 +1,43 @@
 const OpenAI = require('openai');
 const pdf = require('pdf-parse');
-const fs = require('fs');
-const path = require('path');
 
-// Load Dataset
-const dataPath = path.join(__dirname, '../data/legal_data.json');
-let legalData = { precedents: [], bns_mappings: [], glossary: [] };
-try {
-  legalData = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
-} catch (e) { console.error("Could not load legal_data.json"); }
+// Hardcoded Clean Legal Dataset (Ensures zero-latency and 100% reliability)
+const legalData = {
+  "precedents": [
+    { "id": "1", "title": "Kesavananda Bharati v. State of Kerala (1973)", "keywords": ["Basic Structure", "Constitution", "Amendments"], "simplified_explanation": "Supreme Court ne kaha ki Parliament Constitution badal sakti hai, lekin uske 'Basic Structure' ko touch nahi kar sakti.", "professional_analysis": "Established the 'Basic Structure Doctrine', limiting Parliament's power to amend the Constitution under Article 368." },
+    { "id": "2", "title": "Association for Democratic Reforms v. Union of India (2024)", "keywords": ["Electoral Bonds", "Right to Information", "Transparency"], "simplified_explanation": "Electoral Bonds ko unconstitutional bola gaya kyunki voters ko funding ke source ka pata hona chahiye.", "professional_analysis": "Struck down the Electoral Bonds Scheme for violating Article 19(1)(a) by allowing anonymous political funding." },
+    { "id": "3", "title": "Supriyo v. Union of India (2023)", "keywords": ["Same-Sex Marriage", "LGBTQ+", "Special Marriage Act"], "simplified_explanation": "Court ne legal marriage recognize nahi ki, par discrimination ke khilaf kadak rules banaye.", "professional_analysis": "Declined to recognize same-sex marriage legally, leaving it to Parliament, while emphasizing the right to a union." },
+    { "id": "4", "title": "Bilkis Yakub Rasool v. Union of India (2024)", "keywords": ["Remission", "Justice", "Jurisdiction"], "simplified_explanation": "11 convicts ki rihayi cancel hui kyunki Gujarat govt ke paas jurisdiction nahi tha.", "professional_analysis": "Quashed the remission granted to convicts, ruling that the state where the trial occurred has the power to remit." },
+    { "id": "5", "title": "Justice K.S. Puttaswamy v. Union of India (2017)", "keywords": ["Privacy", "Fundamental Right", "Article 21"], "simplified_explanation": "Privacy har Bharatiya ka ek Fundamental Right hai.", "professional_analysis": "Upheld the Right to Privacy as a fundamental right protected under Article 21 and Part III." },
+    { "id": "6", "title": "State of Punjab v. Davinder Singh (2024)", "keywords": ["SC/ST Reservation", "Sub-classification", "Equality"], "simplified_explanation": "States ab SC/ST categories ke beech sub-groups bana sakte hain sacha fayda dene ke liye.", "professional_analysis": "Permitted sub-classification within Reserved Categories to ensure benefits reach the most marginalized sub-groups." },
+    { "id": "7", "title": "X v. Principal Secretary, Health (2022)", "keywords": ["Abortion Rights", "Bodily Autonomy", "MTP Act"], "simplified_explanation": "Unmarried women ko bhi 24 weeks tak abortion ka pura haq hai.", "professional_analysis": "Extended abortion rights to unmarried women up to 24 weeks, ensuring equality in reproductive choices." },
+    { "id": "8", "title": "SITA v. State of Jharkhand (2024)", "keywords": ["Bribery", "Immunity", "MPs/MLAs"], "simplified_explanation": "MPs aur MLAs ko rishwat (bribe) lene par assembly mein immunity nahi milegi.", "professional_analysis": "Overruled the 1998 PV Narasimha Rao judgment; held that legislators do not enjoy immunity for taking bribes related to speeches or votes." },
+    { "id": "9", "title": "Common Cause v. Union of India (2023 Update)", "keywords": ["Living Will", "Euthanasia", "Right to Die"], "simplified_explanation": "Dignified death aur 'Living Will' ke rules ko easy bana diya gaya.", "professional_analysis": "Simplified the procedure for 'Passive Euthanasia' and the execution of Advanced Medical Directives (Living Wills)." },
+    { "id": "10", "title": "Kaushal Kishor v. State of Uttar Pradesh (2023)", "keywords": ["Free Speech", "Public Officials", "Article 19(2)"], "simplified_explanation": "Ministers aur bade officials ke speech par extra restrictions nahi lagaye ja sakte, bas jo law mein hain wahi.", "professional_analysis": "Held that additional restrictions cannot be imposed on the free speech of public functionaries beyond Article 19(2)." }
+  ],
+  "bns_mappings": [
+    { "ipc": "302", "bns": "103", "offense": "Murder", "change": "IPC 302 -> BNS 103", "simplified": "Hatya ki dhara ab 103 hai." },
+    { "ipc": "307", "bns": "109", "offense": "Attempt to Murder", "change": "IPC 307 -> BNS 109", "simplified": "Hatya ki koshish ab 109 hai." },
+    { "ipc": "420", "bns": "318", "offense": "Cheating", "change": "IPC 420 -> BNS 318", "simplified": "Dhokhadhari ab 318 mein aayegi." },
+    { "ipc": "376", "bns": "64", "offense": "Rape Punishment", "change": "IPC 376 -> BNS 64", "simplified": "Rape ki saza ab Section 64 mein hai." },
+    { "ipc": "379", "bns": "303", "offense": "Theft", "change": "IPC 379 -> BNS 303", "simplified": "Chori ab Section 303 mein hai." },
+    { "ipc": "498A", "bns": "85", "offense": "Cruelty by Husband/Relatives", "change": "IPC 498A -> BNS 85", "simplified": "Patni par zulm ab Section 85 mein hai." },
+    { "ipc": "499/500", "bns": "356", "offense": "Defamation", "change": "IPC 500 -> BNS 356", "simplified": "Maan-haani ab Section 356 mein hai." },
+    { "ipc": "506", "bns": "351(2)", "offense": "Criminal Intimidation", "change": "IPC 506 -> BNS 351", "simplified": "Dhamki dena ab Section 351 mein hai." },
+    { "ipc": "391", "bns": "310", "offense": "Dacoity", "change": "IPC 391 -> BNS 310", "simplified": "Dakaiti ab Section 310 mein hai." },
+    { "ipc": "406", "bns": "316", "offense": "Criminal Breach of Trust", "change": "IPC 406 -> BNS 316", "simplified": "Bharosa todna (Breach of trust) ab 316 mein hai." },
+    { "ipc": "120B", "bns": "61", "offense": "Criminal Conspiracy", "change": "IPC 120B -> BNS 61", "simplified": "Saazish rachna ab 61 mein hai." },
+    { "ipc": "124A", "bns": "152", "offense": "Sedition (Acts endangering sovereignty)", "change": "IPC 124A -> BNS 152", "simplified": "Desh-droh ab Section 152 mein hai." },
+    { "ipc": "141/143", "bns": "189", "offense": "Unlawful Assembly", "change": "IPC 143 -> BNS 189", "simplified": "Gair-kanooni bheed ab Section 189 mein hai." },
+    { "ipc": "323", "bns": "115", "offense": "Voluntarily causing hurt", "change": "IPC 323 -> BNS 115", "simplified": "Chot pahunchana ab Section 115 mein hai." },
+    { "ipc": "354", "bns": "74", "offense": "Outraging modesty of woman", "change": "IPC 354 -> BNS 74", "simplified": "Mahila ki maryada se khelna ab Section 74 mein hai." },
+    { "ipc": "363", "bns": "137", "offense": "Kidnapping", "change": "IPC 363 -> BNS 137", "simplified": "Apaharan (Kidnapping) ab Section 137 mein hai." },
+    { "ipc": "441/447", "bns": "329", "offense": "Criminal Trespass", "change": "IPC 447 -> BNS 329", "simplified": "Bina ijazat ghusna ab Section 329 mein hai." },
+    { "ipc": "465", "bns": "336", "offense": "Forgery", "change": "IPC 465 -> BNS 336", "simplified": "Nakli documents banana ab 336 mein hai." },
+    { "ipc": "New", "bns": "103(2)", "offense": "Mob Lynching", "change": "Specific BNS clause for group-based murder.", "simplified": "Mob lynching ki hatya ab 103(2) mein hogi." },
+    { "ipc": "New", "bns": "69", "offense": "Sex on false promise of marriage", "change": "Explicitly defined crime in BNS.", "simplified": "Jhuthe shaadi ke waade par relation banana ab Section 69 mein hai." }
+  ]
+};
 
 const getOpenAI = () => new OpenAI({ 
   apiKey: process.env.GROQ_API_KEY, 
@@ -16,64 +45,37 @@ const getOpenAI = () => new OpenAI({
 });
 
 const summarizeJudgment = async (req, res) => {
-  console.log("Summarize Request Received:", { 
-    bodyKeys: Object.keys(req.body), 
-    hasFile: !!req.file,
-    fileField: req.file?.fieldname 
-  });
   try {
     let textToSummarize = req.body.text;
-
-    // Handle PDF File Upload
     if (req.file) {
-      console.log("Extracting PDF text...");
       const data = await pdf(req.file.buffer);
       textToSummarize = data.text;
-      console.log("PDF Extraction Complete. Length:", textToSummarize?.length || 0);
     }
-
     if (!textToSummarize || textToSummarize.trim().length < 10) {
-      console.log("Summarization aborted: Insufficient text length.");
       return res.status(400).json({ message: "Provided judgment text is too short or invalid" });
     }
-
     const openai = getOpenAI();
-    const prompt = `Summarize this legal judgment into exactly 5 bullet points in Roman Hinglish. 
-    Include the core facts and the 'Ratio Decidendi'. 
-    Use a professional yet accessible Hinglish tone.
-    
-    Text: ${textToSummarize.substring(0, 6000)}`;
-
+    const prompt = `Summarize this legal judgment into exactly 5 bullet points in Roman Hinglish. Include core facts and 'Ratio Decidendi'. Text: ${textToSummarize.substring(0, 6000)}`;
     const completion = await openai.chat.completions.create({
       model: "llama-3.1-8b-instant",
       messages: [{ role: "user", content: prompt }]
     });
-
     res.json({ summary: completion.choices[0].message.content });
   } catch (error) {
-    console.error("Summarization Error:", error);
     res.status(500).json({ message: "Summarization failed" });
   }
 };
 
 const searchPrecedents = async (req, res) => {
   const { query } = req.body;
-  if (!query) return res.json({ results: [] });
-
+  const searchTerm = query ? query.toLowerCase().replace(/ipc|bns|section|dhara/g, "").trim() : "";
   try {
-    const searchTerm = query.toLowerCase();
-    
-    // Live Search Logic: Filter through synthesized dataset
+    if (!searchTerm) return res.json({ results: legalData.precedents });
     const results = legalData.precedents.filter(p => 
       p.title.toLowerCase().includes(searchTerm) || 
       p.keywords.some(k => k.toLowerCase().includes(searchTerm)) ||
       p.professional_analysis.toLowerCase().includes(searchTerm)
-    ).map(p => ({
-        ...p,
-        // Add a "matchType" or score if needed
-        relevance: 100 
-    }));
-
+    ).map(p => ({ ...p, relevance: 100 }));
     res.json({ results });
   } catch (error) {
     res.status(500).json({ message: "Search failed" });
@@ -82,18 +84,14 @@ const searchPrecedents = async (req, res) => {
 
 const mapLaw = async (req, res) => {
   const { query } = req.body;
-  if (!query) return res.json({ matches: [] });
-
+  const searchTerm = query ? query.toLowerCase().replace(/ipc|bns|section|dhara/g, "").trim() : "";
   try {
-    const searchTerm = query.toLowerCase();
-    
-    // Find matching sections in the dataset
+    if (!searchTerm) return res.json({ matches: legalData.bns_mappings });
     const matches = legalData.bns_mappings.filter(m => 
-      m.ipc.includes(searchTerm) || 
-      m.bns.includes(searchTerm) || 
+      m.ipc.toLowerCase().includes(searchTerm) || 
+      m.bns.toLowerCase().includes(searchTerm) || 
       m.offense.toLowerCase().includes(searchTerm)
     );
-
     res.json({ matches });
   } catch (error) {
     res.status(500).json({ message: "Mapping failed" });

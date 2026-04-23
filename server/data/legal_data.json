@@ -3,87 +3,99 @@
     {
       "id": "1",
       "title": "Kesavananda Bharati v. State of Kerala (1973)",
-      "keywords": ["Basic Structure", "Constitution", "Amendments", "Fundamental Rights"],
-      "simplified_explanation": "Supreme Court ne kaha ki Parliament Constitution badal sakti hai, lekin uske 'Basic Structure' ko touch nahi kar sakti. Yeh democracy ko bachane wala sabse bada case hai.",
-      "professional_analysis": "Established the 'Basic Structure Doctrine'. Held that while Parliament has the power to amend the Constitution under Article 368, such power does not extend to altering its essential features."
+      "keywords": ["Basic Structure", "Constitution", "Amendments"],
+      "simplified_explanation": "Supreme Court ne kaha ki Parliament Constitution badal sakti hai, lekin uske 'Basic Structure' ko touch nahi kar sakti.",
+      "professional_analysis": "Established the 'Basic Structure Doctrine', limiting Parliament's power to amend the Constitution under Article 368."
     },
     {
       "id": "2",
-      "title": "Maneka Gandhi v. Union of India (1978)",
-      "keywords": ["Personal Liberty", "Article 21", "Due Process", "Passport"],
-      "simplified_explanation": "Case ne clear kiya ki kisi ki freedom lene ke liye kanoon 'fair' aur 'just' hona chahiye. Sirf kanoon hona kaafi nahi hai.",
-      "professional_analysis": "Expanded the scope of Article 21. Established that 'Procedure established by law' must be just, fair, and reasonable, incorporating the principle of Substantive Due Process."
+      "title": "Association for Democratic Reforms v. Union of India (2024)",
+      "keywords": ["Electoral Bonds", "Right to Information", "Transparency"],
+      "simplified_explanation": "Electoral Bonds ko unconstitutional bola gaya kyunki voters ko funding ke source ka pata hona chahiye.",
+      "professional_analysis": "Struck down the Electoral Bonds Scheme for violating Article 19(1)(a) by allowing anonymous political funding."
     },
     {
       "id": "3",
-      "title": "Vishaka v. State of Rajasthan (1997)",
-      "keywords": ["Sexual Harassment", "Workplace", "Women Rights", "Guidelines"],
-      "simplified_explanation": "Workplace par sexual harassment rokne ke liye pehli baar rules (Guidelines) diye gaye jo baad mein POSH Act bana.",
-      "professional_analysis": "Formulated the 'Vishaka Guidelines' to address sexual harassment at the workplace in the absence of enacted legislation, drawing from CEDAW (International Law)."
+      "title": "Supriyo v. Union of India (2023)", 
+      "keywords": ["Same-Sex Marriage", "LGBTQ+", "Special Marriage Act"], 
+      "simplified_explanation": "Court ne legal marriage recognize nahi ki, par discrimination ke khilaf kadak rules banaye.",
+      "professional_analysis": "Declined to recognize same-sex marriage legally, leaving it to Parliament, while emphasizing the right to a union."
     },
     {
       "id": "4",
-      "title": "Navtej Singh Johar v. Union of India (2018)",
-      "keywords": ["Article 377", "LGBTQ", "Privacy", "Decriminalization"],
-      "simplified_explanation": "Supreme Court ne Section 377 ko khatam kiya aur kaha ki LGBTQ community ke rights bhi Fundamental Rights hain.",
-      "professional_analysis": "Decriminalized consensual homosexual acts between adults by reading down Section 377 of the IPC, citing violations of Articles 14, 15, 19, and 21."
+      "title": "Bilkis Yakub Rasool v. Union of India (2024)",
+      "keywords": ["Remission", "Justice", "Jurisdiction"],
+      "simplified_explanation": "11 convicts ki rihayi cancel hui kyunki Gujarat govt ke paas jurisdiction nahi tha.",
+      "professional_analysis": "Quashed the remission granted to convicts, ruling that the state where the trial occurred has the power to remit."
     },
     {
-       "id": "5",
-       "title": "Justice K.S. Puttaswamy v. Union of India (2017)",
-       "keywords": ["Privacy", "Fundamental Right", "Article 21", "Data Protection"],
-       "simplified_explanation": "Court ne announce kiya ki Privacy har Bharatiya ka ek Fundamental Right hai jo Article 21 ke andar aata hai.",
-       "professional_analysis": "Unanimously held that the Right to Privacy is a fundamental right protected under Part III of the Constitution, specifically under Article 21's Right to Life and Liberty."
+      "id": "5",
+      "title": "Justice K.S. Puttaswamy v. Union of India (2017)",
+      "keywords": ["Privacy", "Fundamental Right", "Article 21"],
+      "simplified_explanation": "Privacy har Bharatiya ka ek Fundamental Right hai.",
+      "professional_analysis": "Upheld the Right to Privacy as a fundamental right protected under Article 21 and Part III."
+    },
+    {
+      "id": "6",
+      "title": "State of Punjab v. Davinder Singh (2024)",
+      "keywords": ["SC/ST Reservation", "Sub-classification", "Equality"],
+      "simplified_explanation": "States ab SC/ST categories ke beech sub-groups bana sakte hain sacha fayda dene ke liye.",
+      "professional_analysis": "Permitted sub-classification within Reserved Categories to ensure benefits reach the most marginalized sub-groups."
+    },
+    {
+      "id": "7",
+      "title": "X v. Principal Secretary, Health (2022)",
+      "keywords": ["Abortion Rights", "Bodily Autonomy", "MTP Act"],
+      "simplified_explanation": "Unmarried women ko bhi 24 weeks tak abortion ka pura haq hai.",
+      "professional_analysis": "Extended abortion rights to unmarried women up to 24 weeks, ensuring equality in reproductive choices."
+    },
+    {
+      "id": "8",
+      "title": "SITA v. State of Jharkhand (2024)",
+      "keywords": ["Bribery", "Immunity", "MPs/MLAs"],
+      "simplified_explanation": "MPs aur MLAs ko rishwat (bribe) lene par assembly mein immunity nahi milegi.",
+      "professional_analysis": "Overruled the 1998 PV Narasimha Rao judgment; held that legislators do not enjoy immunity for taking bribes related to speeches or votes."
+    },
+    {
+      "id": "9",
+      "title": "Common Cause v. Union of India (2023 Update)",
+      "keywords": ["Living Will", "Euthanasia", "Right to Die"],
+      "simplified_explanation": "Dignified death aur 'Living Will' ke rules ko easy bana diya gaya.",
+      "professional_analysis": "Simplified the procedure for 'Passive Euthanasia' and the execution of Advanced Medical Directives (Living Wills)."
+    },
+    {
+      "id": "10",
+      "title": "Kaushal Kishor v. State of Uttar Pradesh (2023)",
+      "keywords": ["Free Speech", "Public Officials", "Article 19(2)"],
+      "simplified_explanation": "Ministers aur bade officials ke speech par extra restrictions nahi lagaye ja sakte, bas jo law mein hain wahi.",
+      "professional_analysis": "Held that additional restrictions cannot be imposed on the free speech of public functionaries beyond Article 19(2)."
     }
   ],
   "bns_mappings": [
-    {
-      "ipc": "302",
-      "bns": "101",
-      "offense": "Murder",
-      "change": "Section number changed from 302 to 101. Punishment remains Death or Life Imprisonment.",
-      "simplified": "Ab Murder ki dhara 101 hogi. Saza umrakaid ya maut hi rahegi."
-    },
-    {
-      "ipc": "307",
-      "bns": "109",
-      "offense": "Attempt to Murder",
-      "change": "Section 307 is now Section 109 in BNS.",
-      "simplified": "Maut ki koshish (Attempt to Murder) ab Section 109 ke andar aayegi."
-    },
-    {
-      "ipc": "375/376",
-      "bns": "63-69",
-      "offense": "Rape/Sexual Offences",
-      "change": "Detailed categorization. False promise to marry now explicitly covered.",
-      "simplified": "Rape ke kanoon ab Section 63-69 mein hain. Shaadi ka jhutha wada karke relation banana ab clear crime hai."
-    },
-    {
-      "ipc": "378/379",
-      "bns": "303",
-      "offense": "Theft",
-      "change": "Section 379 moved to 303.",
-      "simplified": "Chori (Theft) ki nayi dhara Section 303 hai."
-    },
-    {
-      "ipc": "420",
-      "bns": "318",
-      "offense": "Cheating",
-      "change": "Cheating moves from famously known 420 to 318.",
-      "simplified": "420 ki dhara (Cheating) ab dhara 318 hogi."
-    },
-    {
-      "ipc": "124A",
-      "bns": "152",
-      "offense": "Sedition (Acts endangering sovereignty)",
-      "change": "Word 'Sedition' removed. Focus shifted to acts endangering sovereignty/integrity of India.",
-      "simplified": "Sedition शब्द hata diya gaya hai. Ab 'Bharat ki ekta aur akhandata ko khatra' pahunchana crime hai Section 152 mein."
-    }
+    { "ipc": "302", "bns": "103", "offense": "Murder", "change": "IPC 302 -> BNS 103", "simplified": "Hatya ki dhara ab 103 hai." },
+    { "ipc": "307", "bns": "109", "offense": "Attempt to Murder", "change": "IPC 307 -> BNS 109", "simplified": "Hatya ki koshish ab 109 hai." },
+    { "ipc": "420", "bns": "318", "offense": "Cheating", "change": "IPC 420 -> BNS 318", "simplified": "Dhokhadhari ab 318 mein aayegi." },
+    { "ipc": "376", "bns": "64", "offense": "Rape Punishment", "change": "IPC 376 -> BNS 64", "simplified": "Rape ki saza ab Section 64 mein hai." },
+    { "ipc": "379", "bns": "303", "offense": "Theft", "change": "IPC 379 -> BNS 303", "simplified": "Chori ab Section 303 mein hai." },
+    { "ipc": "498A", "bns": "85", "offense": "Cruelty by Husband/Relatives", "change": "IPC 498A -> BNS 85", "simplified": "Patni par zulm ab Section 85 mein hai." },
+    { "ipc": "499/500", "bns": "356", "offense": "Defamation", "change": "IPC 500 -> BNS 356", "simplified": "Maan-haani ab Section 356 mein hai." },
+    { "ipc": "506", "bns": "351(2)", "offense": "Criminal Intimidation", "change": "IPC 506 -> BNS 351", "simplified": "Dhamki dena ab Section 351 mein hai." },
+    { "ipc": "395", "bns": "310", "offense": "Dacoity", "change": "IPC 395 -> BNS 310", "simplified": "Dakaiti ab Section 310 mein hai." },
+    { "ipc": "406", "bns": "316", "offense": "Criminal Breach of Trust", "change": "IPC 406 -> BNS 316", "simplified": "Bharosa todna (Breach of trust) ab 316 mein hai." },
+    { "ipc": "120B", "bns": "61", "offense": "Criminal Conspiracy", "change": "IPC 120B -> BNS 61", "simplified": "Saazish rachna ab 61 mein hai." },
+    { "ipc": "124A", "bns": "152", "offense": "Sedition (Integrity of India)", "change": "IPC 124A -> BNS 152", "simplified": "Desh-droh (Integrity) ab Section 152 mein hai." },
+    { "ipc": "141/143", "bns": "189", "offense": "Unlawful Assembly", "change": "IPC 143 -> BNS 189", "simplified": "Gair-kanooni bheed ab Section 189 mein hai." },
+    { "ipc": "323", "bns": "115", "offense": "Voluntarily causing hurt", "change": "IPC 323 -> BNS 115", "simplified": "Chot pahunchana ab Section 115 mein hai." },
+    { "ipc": "354", "bns": "74", "offense": "Outraging modesty of woman", "change": "IPC 354 -> BNS 74", "simplified": "Mahila ki maryada se khelna ab Section 74 mein hai." },
+    { "ipc": "363", "bns": "137", "offense": "Kidnapping", "change": "IPC 363 -> BNS 137", "simplified": "Apaharan (Kidnapping) ab Section 137 mein hai." },
+    { "ipc": "441/447", "bns": "329", "offense": "Criminal Trespass", "change": "IPC 447 -> BNS 329", "simplified": "Bina ijazat ghusna ab Section 329 mein hai." },
+    { "ipc": "465", "bns": "336", "offense": "Forgery", "change": "IPC 465 -> BNS 336", "simplified": "Nakli documents banana ab 336 mein hai." },
+    { "ipc": "New", "bns": "103(2)", "offense": "Mob Lynching", "change": "Specific BNS clause for group-based murder.", "simplified": "Mob lynching ki hatya ab 103(2) mein hogi." },
+    { "ipc": "New", "bns": "69", "offense": "Sex on false promise of marriage", "change": "Explicitly defined crime in BNS.", "simplified": "Jhuthe shaadi ke waade par relation banana ab Section 69 mein hai." }
   ],
   "glossary": [
     { "term": "Ratio Decidendi", "meaning": "The objective legal reason for a court's decision." },
-    { "term": "Obiter Dictum", "meaning": "A judge's expression of opinion uttered in court or in a written judgement, but not essential to the decision." },
-    { "term": "Mens Rea", "meaning": "Guilty mind; the intention or knowledge of wrongdoing." },
-    { "term": "Actus Reus", "meaning": "The physical act of committing a crime." }
+    { "term": "BNS 2023", "meaning": "Bharatiya Nyaya Sanhita - Successor to IPC." },
+    { "term": "Article 21", "meaning": "Right to Life and Personal Liberty." }
   ]
 }

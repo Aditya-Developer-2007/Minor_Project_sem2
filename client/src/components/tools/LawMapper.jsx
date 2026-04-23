@@ -7,34 +7,51 @@ import { AuthContext } from '../../context/auth-context';
 const LawMapper = () => {
     const { user } = useContext(AuthContext);
     const [query, setQuery] = useState('');
+    const [allMatches, setAllMatches] = useState([]);
     const [matches, setMatches] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
 
-    // Live Mapping with Debounce
+    const suggestions = [
+        { ipc: "302", label: "Murder" },
+        { ipc: "420", label: "Cheating" },
+        { ipc: "376", label: "Rape" },
+        { ipc: "307", label: "Attempt to Murder" },
+        { ipc: "379", label: "Theft" },
+        { ipc: "124A", label: "Sedition" }
+    ];
+
+    // Initial Load
     useEffect(() => {
-        const delayDebounceFn = setTimeout(() => {
-            if (query.trim().length > 1) {
-                performMapping();
-            } else if (query.length === 0) {
-                setMatches([]);
-            }
-        }, 300);
+        fetchAllMappings();
+    }, []);
 
-        return () => clearTimeout(delayDebounceFn);
-    }, [query]);
-
-    const performMapping = async () => {
+    const fetchAllMappings = async () => {
         setIsLoading(true);
         try {
             const config = { headers: { Authorization: `Bearer ${user.token}` } };
-            const { data } = await api.post('/tools/map', { query }, config);
+            const { data } = await api.post('/tools/map', { query: "" }, config);
+            setAllMatches(data.matches);
             setMatches(data.matches);
         } catch (error) {
-            console.error("Mapping failed:", error);
+            console.error("Fetch failed:", error);
         } finally {
             setIsLoading(false);
         }
     };
+
+    // Live Filtering
+    useEffect(() => {
+        if (query.trim().length === 0) {
+            setMatches(allMatches);
+        } else {
+            const filtered = allMatches.filter(m => 
+                m.ipc.toLowerCase().includes(query.toLowerCase()) ||
+                m.bns.toLowerCase().includes(query.toLowerCase()) ||
+                m.offense.toLowerCase().includes(query.toLowerCase())
+            );
+            setMatches(filtered);
+        }
+    }, [query, allMatches]);
 
     return (
         <div className="h-full flex flex-col bg-[#09090b] text-gray-100 p-4 md:p-8 overflow-hidden font-sans">
@@ -51,18 +68,34 @@ const LawMapper = () => {
                     </p>
                 </div>
 
-                {/* Search Bar */}
-                <div className="relative group max-w-2xl mx-auto w-full">
-                    <div className="absolute left-6 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-emerald-400 transition-colors">
-                        {isLoading ? <Loader2 className="animate-spin" size={22} /> : <Languages size={22} />}
+                {/* Search Bar & Suggestions */}
+                <div className="space-y-6 max-w-2xl mx-auto w-full">
+                    <div className="relative group">
+                        <div className="absolute left-6 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-emerald-400 transition-colors">
+                            {isLoading ? <Loader2 className="animate-spin" size={22} /> : <Languages size={22} />}
+                        </div>
+                        <input 
+                            type="text" 
+                            value={query}
+                            onChange={(e) => setQuery(e.target.value)}
+                            placeholder="Search IPC 302, 420, or 'Theft'..."
+                            className="w-full bg-[#111111] border border-white/5 focus:border-emerald-500/50 pl-16 pr-6 py-5 rounded-[2rem] text-white outline-none transition-all shadow-2xl placeholder:text-gray-600 text-lg"
+                        />
                     </div>
-                    <input 
-                        type="text" 
-                        value={query}
-                        onChange={(e) => setQuery(e.target.value)}
-                        placeholder="Search IPC 302, 420, or 'Theft'..."
-                        className="w-full bg-[#111111] border border-white/5 focus:border-emerald-500/50 pl-16 pr-6 py-5 rounded-[2rem] text-white outline-none transition-all shadow-2xl placeholder:text-gray-600 text-lg"
-                    />
+
+                    {/* Suggestions Chips */}
+                    <div className="flex flex-wrap items-center justify-center gap-2">
+                        <span className="text-[10px] font-black text-gray-600 uppercase tracking-widest mr-2">Quick Search:</span>
+                        {suggestions.map((s) => (
+                            <button
+                                key={s.ipc}
+                                onClick={() => setQuery(s.ipc)}
+                                className="px-3 py-1.5 rounded-full bg-white/5 border border-white/5 text-gray-400 text-[10px] font-bold hover:bg-emerald-500/10 hover:border-emerald-500/30 hover:text-emerald-400 transition-all active:scale-95"
+                            >
+                                IPC {s.ipc} ({s.label})
+                            </button>
+                        ))}
+                    </div>
                 </div>
 
                 {/* Comparison Grid */}
@@ -91,12 +124,12 @@ const LawMapper = () => {
                                                 </div>
                                                 <div className="bg-red-500/5 border border-red-500/10 p-6 rounded-2xl">
                                                     <h3 className="text-4xl font-black text-white mb-2">Section {item.ipc}</h3>
-                                                    <p className="text-red-400 font-bold uppercase tracking-widest text-xs">{item.offense}</p>
+                                                    <p className="text-red-400 font-bold uppercase tracking-widest text-xs truncate">{item.offense}</p>
                                                 </div>
                                             </div>
 
                                             {/* Transition Arrow */}
-                                            <div className="bg-emerald-500/10 p-4 rounded-full border border-emerald-500/20 shadow-lg shadow-emerald-500/10">
+                                            <div className="bg-emerald-500/10 p-4 rounded-full border border-emerald-500/20 shadow-lg shadow-emerald-500/10 hidden md:block">
                                                 <ArrowRight size={32} className="text-emerald-400" />
                                             </div>
 
@@ -131,39 +164,20 @@ const LawMapper = () => {
                                 ))}
                             </div>
                         ) : (
-                            !isLoading && query.length > 0 && (
-                                <div className="h-40 flex flex-col items-center justify-center text-gray-600">
-                                    <Map size={32} className="mb-2 opacity-20" />
-                                    <p className="text-sm">No mapping found for "{query}"</p>
+                            !isLoading && (
+                                <div className="h-60 flex flex-col items-center justify-center text-gray-600 bg-[#111111]/30 border border-dashed border-white/5 rounded-3xl">
+                                    <Map size={48} className="mb-4 opacity-10" />
+                                    <p className="text-sm font-medium">No legal mapping found for "{query}"</p>
+                                    <button 
+                                        onClick={() => setQuery('')}
+                                        className="mt-4 text-xs text-emerald-400 font-bold hover:underline"
+                                    >
+                                        Clear search and view all
+                                    </button>
                                 </div>
                             )
                         )}
                     </AnimatePresence>
-
-                    {!isLoading && query.length === 0 && (
-                        <div className="mt-12 space-y-12">
-                             <div className="bg-[#111111]/30 border border-white/5 p-10 rounded-[3rem] text-center space-y-4">
-                                <Table size={48} className="mx-auto text-gray-800" />
-                                <h3 className="text-2xl font-bold">Why the new mapping?</h3>
-                                <p className="text-gray-500 text-sm max-w-2xl mx-auto">
-                                    The Bharatiya Nyaya Sanhita (BNS) replaces the age-old IPC. Sections have been rearranged and updated to reflect modern Indian judicial values and to remove colonial-era terminology.
-                                </p>
-                             </div>
-
-                             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                {[
-                                    { label: '302 → 101', desc: 'Murder' },
-                                    { label: '307 → 109', desc: 'Attempt to Murder' },
-                                    { label: '420 → 318', desc: 'Cheating' }
-                                ].map((badge, i) => (
-                                    <div key={i} className="flex flex-col items-center p-6 bg-white/5 rounded-3xl border border-white/5">
-                                        <span className="text-xl font-black text-white">{badge.label}</span>
-                                        <span className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mt-1">{badge.desc}</span>
-                                    </div>
-                                ))}
-                             </div>
-                        </div>
-                    )}
                 </div>
             </div>
         </div>

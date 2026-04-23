@@ -285,20 +285,6 @@
     },
     {
       "user": "mock_user_1776361949386",
-      "messages": [],
-      "_id": "mock_chat_1776700560670",
-      "isPinned": false,
-      "updatedAt": "2026-04-20T15:56:00.670Z"
-    },
-    {
-      "user": "mock_user_1776361949386",
-      "messages": [],
-      "_id": "mock_chat_1776700593095",
-      "isPinned": false,
-      "updatedAt": "2026-04-20T15:56:33.095Z"
-    },
-    {
-      "user": "mock_user_1776361949386",
       "messages": [
         {
           "role": "user",
@@ -313,51 +299,6 @@
       "isPinned": false,
       "updatedAt": "2026-04-20T15:57:37.820Z",
       "title": "Qatl Ka Badi Jald \n('Qatl' means 'murder' in Hindi, 'Ka Badi Jald' means 'Its very soon punishment'.)"
-    },
-    {
-      "user": "mock_user_1776361949386",
-      "messages": [
-        {
-          "role": "user",
-          "content": "What is the punishment for murder?"
-        },
-        {
-          "role": "assistant",
-          "content": "{\n  \"normal\": \"Murder ka punishment Death ya Life Imprisonment hai.\",\n   \"professional\": \"### Legal Analysis\\n\\n**Statutory Context**: BNS 101 (Murder)\\n\\n**Punishment**: Death or Life Imprisonment as per Section 101 of the BNS Act.\",\n   \"suggested_sections\": [\"BNS 101\"]\n}"
-        }
-      ],
-      "_id": "mock_chat_1776700709270",
-      "isPinned": false,
-      "updatedAt": "2026-04-20T15:58:29.270Z",
-      "title": "Maut Ki Kabri Nazar"
-    },
-    {
-      "user": "mock_user_1776361949386",
-      "messages": [],
-      "_id": "mock_chat_1776700823359",
-      "isPinned": false,
-      "updatedAt": "2026-04-20T16:00:23.359Z"
-    },
-    {
-      "user": "mock_user_1776361949386",
-      "messages": [],
-      "_id": "mock_chat_1776700857175",
-      "isPinned": false,
-      "updatedAt": "2026-04-20T16:00:57.175Z"
-    },
-    {
-      "user": "mock_user_1776361949386",
-      "messages": [],
-      "_id": "mock_chat_1776700909754",
-      "isPinned": false,
-      "updatedAt": "2026-04-20T16:01:49.754Z"
-    },
-    {
-      "user": "mock_user_1776361949386",
-      "messages": [],
-      "_id": "mock_chat_1776700955467",
-      "isPinned": false,
-      "updatedAt": "2026-04-20T16:02:35.467Z"
     },
     {
       "user": "mock_user_1776361949386",
@@ -383,6 +324,105 @@
       "isPinned": false,
       "updatedAt": "2026-04-20T16:03:33.380Z",
       "title": "Qatl ki sabse Bharat."
+    },
+    {
+      "user": "mock_user_1776707581737",
+      "messages": [],
+      "_id": "mock_chat_1776754038514",
+      "isPinned": false,
+      "updatedAt": "2026-04-21T06:47:18.514Z"
+    },
+    {
+      "user": "mock_user_1776707581737",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What are my rights if I am arrested?"
+        }
+      ],
+      "_id": "mock_chat_1776956834840",
+      "isPinned": false,
+      "updatedAt": "2026-04-23T15:07:14.840Z"
+    },
+    {
+      "user": "mock_user_1776707581737",
+      "messages": [],
+      "_id": "mock_chat_1776956915561",
+      "isPinned": false,
+      "updatedAt": "2026-04-23T15:08:35.561Z"
+    },
+    {
+      "user": "mock_user_1776707581737",
+      "messages": [],
+      "_id": "mock_chat_1776957080633",
+      "isPinned": false,
+      "updatedAt": "2026-04-23T15:11:20.633Z"
+    },
+    {
+      "user": "mock_user_1776707581737",
+      "messages": [],
+      "_id": "mock_chat_1776957087498",
+      "isPinned": false,
+      "updatedAt": "2026-04-23T15:11:27.498Z"
+    },
+    {
+      "user": "mock_user_1776707581737",
+      "messages": [],
+      "_id": "mock_chat_1776957087713",
+      "isPinned": false,
+      "updatedAt": "2026-04-23T15:11:27.713Z"
+    },
+    {
+      "user": "mock_user_1776707581737",
+      "messages": [],
+      "_id": "mock_chat_1776957087878",
+      "isPinned": false,
+      "updatedAt": "2026-04-23T15:11:27.878Z"
+    },
+    {
+      "user": "mock_user_1776707581737",
+      "messages": [],
+      "_id": "mock_chat_1776957088268",
+      "isPinned": false,
+      "updatedAt": "2026-04-23T15:11:28.268Z"
+    },
+    {
+      "user": "mock_user_1776707581737",
+      "messages": [],
+      "_id": "mock_chat_1776957088496",
+      "isPinned": false,
+      "updatedAt": "2026-04-23T15:11:28.496Z"
+    },
+    {
+      "user": "mock_user_1776707581737",
+      "messages": [],
+      "_id": "mock_chat_1776957088793",
+      "isPinned": false,
+      "updatedAt": "2026-04-23T15:11:28.793Z"
+    },
+    {
+      "user": "mock_user_1776707581737",
+      "messages": [],
+      "_id": "mock_chat_1776957089011",
+      "isPinned": false,
+      "updatedAt": "2026-04-23T15:11:29.011Z"
+    },
+    {
+      "user": "mock_user_1776707581737",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What are the penalties for theft in BNS?"
+        },
+        {
+          "role": "assistant",
+          "content": "{\n  \"normal\": \"BNS 303 ke tahat, chori ki saza 3 saal tak ki jail aur jaurmana ho sakti hai.\",\n   \"professional\": \"BNS 303 (Theft) ke antargat, dand 3 varsh tak ki kathor kaid aur arthik dand ka pravadhan hai, jo ki apradhi ki sthiti aur apradh ki ghatna par nirbhar karta hai.\",\n   \"suggested_sections\": [\"BNS 303\", \"IPC 379\"]\n}"
+        }
+      ],
+      "_id": "mock_chat_1776957094163",
+      "isPinned": false,
+      "updatedAt": "2026-04-23T15:11:34.163Z",
+      "title": "BNS Ki Chori Ka"
     }
   ]
 }

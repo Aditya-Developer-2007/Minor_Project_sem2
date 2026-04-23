@@ -36,21 +36,31 @@ const contextSearch = (query) => {
     const term = query.toLowerCase();
     const matches = [];
     
-    // Search BNS mappings
+    // Improved Keyword Matching with Weighting
     legalData.bns_mappings.forEach(m => {
-        if (term.includes(m.ipc) || term.includes(m.bns) || term.includes(m.offense.toLowerCase())) {
-            matches.push(`IPC ${m.ipc} is now BNS ${m.bns} (${m.offense}). Change: ${m.change}`);
+        let weight = 0;
+        if (term.includes(m.bns.toLowerCase())) weight += 3;
+        if (term.includes(m.ipc.toLowerCase())) weight += 2;
+        if (m.offense.toLowerCase().split(' ').some(word => term.includes(word))) weight += 1;
+        
+        if (weight > 0) {
+            matches.push({ text: `IPC ${m.ipc} -> BNS ${m.bns} (${m.offense}). Change: ${m.change}`, weight });
         }
     });
 
-    // Search Precedents
     legalData.precedents.forEach(p => {
-        if (p.keywords.some(k => term.includes(k.toLowerCase())) || p.title.toLowerCase().includes(term)) {
-            matches.push(`PRECEDENT: ${p.title}. Ratio: ${p.professional_analysis}`);
+        let weight = 0;
+        if (p.title.toLowerCase().includes(term)) weight += 3;
+        if (p.keywords.some(k => term.includes(k.toLowerCase()))) weight += 2;
+        if (p.professional_analysis.toLowerCase().includes(term)) weight += 1;
+
+        if (weight > 0) {
+            matches.push({ text: `PRECEDENT: ${p.title}. Ratio: ${p.professional_analysis}`, weight });
         }
     });
 
-    return matches.slice(0, 3).join("\n");
+    // Sort by weight and pick top 5
+    return matches.sort((a, b) => b.weight - a.weight).slice(0, 5).map(m => m.text).join("\n");
 };
 
 const createSession = async (req, res) => {
@@ -70,7 +80,7 @@ const getSessions = async (req, res) => {
 };
 
 const sendMessage = async (req, res) => {
-  const { chatId, content } = req.body;
+  const { chatId, content, stream = false } = req.body;
 
   try {
     const openai = new OpenAI({ 
@@ -86,22 +96,53 @@ const sendMessage = async (req, res) => {
     
     chat.messages.push({ role: 'user', content });
 
-    // Step 2: AI Response with Context
-    const completion = await openai.chat.completions.create({
-      model: "llama-3.1-8b-instant",
+    if (!stream) {
+        // Non-streaming logic (legacy support)
+        const completion = await openai.chat.completions.create({
+            model: "llama-3.1-8b-instant",
+            response_format: { type: "json_object" },
+            messages: [
+                { role: "system", content: SYSTEM_PROMPT },
+                { role: "system", content: `GROUND TRUTH CONTEXT:\n${context || "No specific matches found."}` },
+                ...chat.messages.map(m => ({ role: m.role, content: m.content }))
+            ],
+            temperature: 0.1, 
+        });
+
+        const aiResponse = completion.choices[0].message.content;
+        chat.messages.push({ role: 'assistant', content: aiResponse });
+        await chat.save();
+        return res.json(chat);
+    }
+
+    // Streaming Logic (SSE)
+    res.setHeader('Content-Type', 'text/event-stream');
+    res.setHeader('Cache-Control', 'no-cache');
+    res.setHeader('Connection', 'keep-alive');
+
+    const completionStream = await openai.chat.completions.create({
+      model: "llama-3.3-70b-versatile", // Updated from decommissioned 3.1-70b
       response_format: { type: "json_object" },
+
       messages: [
         { role: "system", content: SYSTEM_PROMPT },
-        { role: "system", content: `GROUND TRUTH CONTEXT FROM LEGAL_DATA.JSON:\n${context || "No specific matches found."}` },
+        { role: "system", content: `GROUND TRUTH CONTEXT:\n${context || "No specific matches found."}` },
         ...chat.messages.map(m => ({ role: m.role, content: m.content }))
       ],
-      temperature: 0.1, 
+      temperature: 0.1,
+      stream: true
     });
 
-    const aiResponse = completion.choices[0].message.content;
-    chat.messages.push({ role: 'assistant', content: aiResponse });
+    let fullResponse = "";
+    for await (const chunk of completionStream) {
+      const content = chunk.choices[0]?.delta?.content || "";
+      fullResponse += content;
+      res.write(`data: ${JSON.stringify({ content })}\n\n`);
+    }
 
-    // Title Generation
+    chat.messages.push({ role: 'assistant', content: fullResponse });
+
+    // Title Generation (Background)
     if (chat.messages.length <= 2) {
        try {
          const titleGen = await openai.chat.completions.create({
@@ -113,12 +154,19 @@ const sendMessage = async (req, res) => {
     }
 
     await chat.save();
-    res.json(chat);
+    res.write(`data: [DONE]\n\n`);
+    res.end();
+
   } catch (error) {
     console.error("Server Error:", error);
-    res.status(500).json({ message: "AI Service Error" });
+    if (!res.headersSent) {
+        res.status(500).json({ message: "AI Service Error" });
+    } else {
+        res.end();
+    }
   }
 };
+
 
 const uploadPDF = async (req, res) => {
   try {

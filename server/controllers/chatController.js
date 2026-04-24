@@ -123,7 +123,7 @@ const sendMessage = async (req, res) => {
     res.setHeader('Connection', 'keep-alive');
 
     const completionStream = await openai.chat.completions.create({
-      model: "llama-3.3-70b-specdec", // More stable than versatile for high-throughput
+      model: "llama-3.3-70b-versatile", // Reverted to valid versatile model
       response_format: { type: "json_object" },
 
       messages: [

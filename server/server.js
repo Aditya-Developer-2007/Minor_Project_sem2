@@ -19,26 +19,51 @@ REQUIRED_ENV.forEach(env => {
 
 const app = express();
 
-// Security Middleware
+// 1. Robust CORS configuration (Must be first to handle OPTIONS preflight)
+const allowedOrigins = [
+  process.env.FRONTEND_URL,
+  "https://nyai-tau.vercel.app",
+  "http://localhost:5173",
+  "http://localhost:5174",
+  "http://localhost:3000"
+].filter(Boolean);
+
+app.use(cors({
+  origin: (origin, callback) => {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    const isAllowed = allowedOrigins.some(allowed => {
+      // Direct match
+      if (origin === allowed) return true;
+      // Vercel subdomain match
+      if (origin.endsWith('.vercel.app') && allowed.includes('vercel.app')) return true;
+      return false;
+    });
+
+    if (isAllowed) {
+      callback(null, true);
+    } else {
+      console.warn(`🚨 CORS Blocked: ${origin}`);
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
+// 2. Security Middleware
 app.use(helmet());
 app.use(express.json());
 
-// Rate Limiting
+// 3. Rate Limiting
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 100, // Limit each IP to 100 requests per windowMs
   message: { message: "Too many requests from this IP, please try again after 15 minutes" }
 });
 app.use("/api/", limiter);
-
-// Robust CORS configuration
-const allowedOrigin = process.env.FRONTEND_URL || "http://localhost:5173";
-const normalizedOrigin = allowedOrigin.startsWith('http') ? allowedOrigin : `https://${allowedOrigin}`;
-
-app.use(cors({
-  origin: [normalizedOrigin, "http://localhost:5173", "http://localhost:5174", "http://localhost:3000"],
-  credentials: true
-}));
 
 // Simple Request Logger
 app.use((req, res, next) => {

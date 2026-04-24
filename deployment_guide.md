@@ -19,8 +19,9 @@ Follow these steps to deploy NYAI to the web for free using Netlify for the fron
    - **Build Command**: `npm install`
    - **Start Command**: `node server.js`
 6. **Environment Variables**:
-   - `MONGODB_URI`: (Your MongoDB Atlas SRV)
+   - `MONGO_URI`: (Your MongoDB Atlas SRV)
    - `GROQ_API_KEY`: (Your Groq API key)
+
    - `JWT_SECRET`: (Any random long string)
    - `FRONTEND_URL`: (You will get this after Netlify deployment)
    - `NODE_ENV`: `production`

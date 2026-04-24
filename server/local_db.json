@@ -35,6 +35,12 @@
       "email": "aditya@gmail.com",
       "password": "123456789",
       "_id": "mock_user_1776707581737"
+    },
+    {
+      "name": "aditya",
+      "email": "aaditya@gmail.com",
+      "password": "12345678+",
+      "_id": "mock_user_1777017598839"
     }
   ],
   "chats": [
@@ -423,6 +429,47 @@
       "isPinned": false,
       "updatedAt": "2026-04-23T15:11:34.163Z",
       "title": "BNS Ki Chori Ka"
+    },
+    {
+      "user": "mock_user_1776707581737",
+      "messages": [
+        {
+          "role": "user",
+          "content": "hi"
+        },
+        {
+          "role": "assistant",
+          "content": "{\n  \"normal\": \"Namaste, main NYAI hoon, aapki madad ke liye yahaan hoon.\",\n   \"professional\": \"Hello, I'm NYAI, your smart Indian Legal Assistant, here to provide you with legal insights and information.\",\n   \"suggested_sections\": [\"Indian Constitution Article 14\", \"Indian Contract Act 1872\"]\n}"
+        }
+      ],
+      "_id": "mock_chat_1777004712646",
+      "isPinned": false,
+      "updatedAt": "2026-04-24T04:25:12.647Z",
+      "title": "Hello, Kya Bata?"
+    },
+    {
+      "user": "mock_user_1777017598839",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Mere arrest rights kya hain?"
+        },
+        {
+          "role": "assistant",
+          "content": "{\n  \"normal\": \"Aapke arrest rights mein shaamil hain ki aapko apne adhikaar ke baare mein bataya jaaye, aapko ek vaakeel ki sahayata milni chahiye, aur aapko apne parivaar ko suchit karne ka adhikaar hai.\",\n   \"professional\": \"Bharatiya dand sanhita ke anusaar, aapke arrest rights mein IPC ke section 50 aur 51 shaamil hain, jo aapko apne adhikaar ke baare mein jaankari dene aur aapko ek vaakeel ki sahayata pradaan karne ka adhikaar dete hain. Iske alaava, aapko apne parivaar ko suchit karne ka adhikaar bhi hai.\",\n   \"suggested_sections\": [\"IPC 50\", \"IPC 51\", \"CRPC 56\"]\n}"
+        }
+      ],
+      "_id": "mock_chat_1777017611705",
+      "isPinned": false,
+      "updatedAt": "2026-04-24T08:00:11.705Z",
+      "title": "Meri arrest ki guarantee."
+    },
+    {
+      "user": "mock_user_1777017598839",
+      "messages": [],
+      "_id": "mock_chat_1777018452254",
+      "isPinned": false,
+      "updatedAt": "2026-04-24T08:14:12.254Z"
     }
   ]
 }

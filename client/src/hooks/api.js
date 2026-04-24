@@ -6,7 +6,8 @@ const getBaseURL = () => {
 
 const api = axios.create({ baseURL: getBaseURL() });
 api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('token');
+  const userInfo = localStorage.getItem('userInfo');
+  const token = userInfo ? JSON.parse(userInfo).token : null;
   if (token) config.headers.Authorization = `Bearer ${token}`;
   return config;
 });

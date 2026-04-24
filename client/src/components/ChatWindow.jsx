@@ -84,7 +84,10 @@ const ChatWindow = ({ currentSession, setSessions }) => {
 
       setPendingPdfText(null);
       
-      if (!response.ok) throw new Error("Stream failed");
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.message || "AI Service Error");
+      }
 
       const reader = response.body.getReader();
       const decoder = new TextDecoder();
@@ -106,6 +109,9 @@ const ChatWindow = ({ currentSession, setSessions }) => {
             
             try {
               const data = JSON.parse(dataStr);
+              if (data.error) {
+                throw new Error(data.error);
+              }
               if (data.content) {
                 assistantResponse += data.content;
                 setLocalMessages(prev => {
@@ -114,7 +120,11 @@ const ChatWindow = ({ currentSession, setSessions }) => {
                   return newMsgs;
                 });
               }
-            } catch (e) {}
+            } catch (e) {
+                if (e.message !== "Unexpected end of JSON input") {
+                    throw e;
+                }
+            }
           }
         }
       }
@@ -127,7 +137,7 @@ const ChatWindow = ({ currentSession, setSessions }) => {
       }
 
     } catch (error) {
-      toast.error("AI Service Error");
+      toast.error(error.message || "AI Service Error");
       console.error(error);
     } finally {
       setIsLoading(false);

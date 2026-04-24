@@ -13,6 +13,12 @@ try {
   legalData = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
 } catch (e) { console.error("Could not load legal_data.json"); }
 
+// Initialize Groq/OpenAI client once
+const openai = new OpenAI({ 
+  apiKey: process.env.GROQ_API_KEY, 
+  baseURL: "https://api.groq.com/openai/v1", 
+});
+
 // UNIVERSAL HINGLISH PROMPT (VERSION 5.2 - DYNAMIC LANGUAGE)
 const SYSTEM_PROMPT = `
 Tumhara naam NYAI hai, ek smart Indian Legal Assistant. 
@@ -83,10 +89,6 @@ const sendMessage = async (req, res) => {
   const { chatId, content, stream = false } = req.body;
 
   try {
-    const openai = new OpenAI({ 
-      apiKey: process.env.GROQ_API_KEY, 
-      baseURL: "https://api.groq.com/openai/v1", 
-    });
 
     const chat = await getChatModel().findOne({ _id: chatId, user: req.user._id });
     if (!chat) return res.status(404).json({ message: 'Chat not found' });
@@ -121,7 +123,7 @@ const sendMessage = async (req, res) => {
     res.setHeader('Connection', 'keep-alive');
 
     const completionStream = await openai.chat.completions.create({
-      model: "llama-3.3-70b-versatile", // Updated from decommissioned 3.1-70b
+      model: "llama-3.3-70b-specdec", // More stable than versatile for high-throughput
       response_format: { type: "json_object" },
 
       messages: [
@@ -158,10 +160,19 @@ const sendMessage = async (req, res) => {
     res.end();
 
   } catch (error) {
-    console.error("Server Error:", error);
+    console.error("❌ AI SERVICE ERROR:", {
+        message: error.message,
+        stack: error.stack,
+        chatId,
+        user: req.user?._id
+    });
+
     if (!res.headersSent) {
-        res.status(500).json({ message: "AI Service Error" });
+        // Send a more descriptive error message to the frontend
+        const errorMsg = error.message?.includes("rate limit") ? "AI Rate Limit Reached" : "AI Service Temporarily Unavailable";
+        res.status(500).json({ message: errorMsg, details: error.message });
     } else {
+        res.write(`data: ${JSON.stringify({ error: "Stream Interrupted", details: error.message })}\n\n`);
         res.end();
     }
   }

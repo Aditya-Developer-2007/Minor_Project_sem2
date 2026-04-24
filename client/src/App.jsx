@@ -26,8 +26,7 @@ function App() {
   const fetchSessions = useCallback(async () => {
     if (!user) return;
     try {
-      const config = { headers: { Authorization: `Bearer ${user.token}` } };
-      const { data } = await api.get("/chats", config);
+      const { data } = await api.get("/chats");
       setSessions(data);
     } catch (error) {
       console.error(error);
@@ -42,8 +41,7 @@ function App() {
 
   const handleNewSession = async () => {
     try {
-      const config = { headers: { Authorization: `Bearer ${user.token}` } };
-      const { data } = await api.post("/chats", {}, config);
+      const { data } = await api.post("/chats", {});
       setSessions([data, ...sessions]);
       setCurrentSessionId(data._id);
       resetTool(); // Ensure we switch to chat view
@@ -54,8 +52,7 @@ function App() {
 
   const handleTogglePin = async (id) => {
     try {
-      const config = { headers: { Authorization: `Bearer ${user.token}` } };
-      const { data } = await api.patch(`/chats/${id}/pin`, {}, config);
+      const { data } = await api.patch(`/chats/${id}/pin`, {});
       setSessions((prev) => prev.map((s) => (s._id === id ? data : s)));
     } catch (error) {
       console.error(error);
@@ -65,8 +62,7 @@ function App() {
   const handleDeleteSession = useCallback(async (id) => {
     if (!window.confirm("Are you sure you want to delete this chat?")) return;
     try {
-      const config = { headers: { Authorization: `Bearer ${user.token}` } };
-      await api.delete(`/chats/${id}`, config);
+      await api.delete(`/chats/${id}`);
       setSessions((prev) => prev.filter((s) => s._id !== id));
       if (currentSessionId === id) {
         setCurrentSessionId(null);

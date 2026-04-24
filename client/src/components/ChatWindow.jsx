@@ -46,8 +46,7 @@ const ChatWindow = ({ currentSession, setSessions }) => {
     formData.append('pdf', file);
 
     try {
-        const config = { headers: { Authorization: `Bearer ${user.token}` } };
-        const { data } = await api.post("/chats/upload", formData, config);
+        const { data } = await api.post("/chats/upload", formData);
         setPendingPdfText(data.text);
         toast.success(`Context Loaded: ${file.name}`);
     } catch (error) {
@@ -73,7 +72,7 @@ const ChatWindow = ({ currentSession, setSessions }) => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${user.token}`
+          'Authorization': `Bearer ${user?.token}`
         },
         body: JSON.stringify({
           chatId: currentSession._id,

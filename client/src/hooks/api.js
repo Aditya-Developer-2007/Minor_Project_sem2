@@ -6,9 +6,19 @@ const getBaseURL = () => {
 
 const api = axios.create({ baseURL: getBaseURL() });
 api.interceptors.request.use((config) => {
-  const userInfo = localStorage.getItem('userInfo');
-  const token = userInfo ? JSON.parse(userInfo).token : null;
-  if (token) config.headers.Authorization = `Bearer ${token}`;
+  try {
+    const userInfo = localStorage.getItem('userInfo');
+    if (userInfo && userInfo !== 'undefined' && userInfo !== 'null') {
+      const parsed = JSON.parse(userInfo);
+      const token = parsed.token || parsed.access_token;
+      
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
+    }
+  } catch (error) {
+    console.error("🔑 AUTH INTERCEPTOR ERROR:", error);
+  }
   return config;
 });
 export default api;

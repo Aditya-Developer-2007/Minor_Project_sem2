@@ -470,6 +470,72 @@
       "_id": "mock_chat_1777018452254",
       "isPinned": false,
       "updatedAt": "2026-04-24T08:14:12.254Z"
+    },
+    {
+      "user": "mock_user_1776169973699",
+      "messages": [
+        {
+          "role": "user",
+          "content": "BNS 2023 kya hai?"
+        },
+        {
+          "role": "assistant",
+          "content": "{\n  \"normal\": \"BNS 2023 ka pata nahin chala, aap kripya adhik jaankari pradaan karein.\",\n   \"professional\": \"BNS 2023 ki jaankari uplabdh nahin hai, yadi aap adhik vistrit jaankari pradaan karte hain to hum aapki madad kar sakte hain.\",\n   \"suggested_sections\": []\n}"
+        },
+        {
+          "role": "user",
+          "content": "Hello"
+        },
+        {
+          "role": "assistant",
+          "content": "{\n  \"normal\": \"Namaste, main aapki madad ke liye yahan hoon.\",\n   \"professional\": \"Namaste, main aapko legal sahayata pradaan karne ke liye yahan hoon, kripya apni samasya batayein.\",\n   \"suggested_sections\": []\n}"
+        }
+      ],
+      "_id": "mock_chat_1777093098064",
+      "isPinned": false,
+      "updatedAt": "2026-04-25T04:58:18.064Z",
+      "title": "Bharat Nagrik Sangathan Ka Itihas."
+    },
+    {
+      "user": "mock_user_1776169973699",
+      "messages": [
+        {
+          "role": "user",
+          "content": "BNS 2023 kya hai?"
+        },
+        {
+          "role": "assistant",
+          "content": "{\n  \"normal\": \"BNS 2023 ka pata nahin chala, aap kripya adhik jaankari pradaan karein.\",\n   \"professional\": \"BNS 2023 ki jaankari uplabdh nahin hai, yadi aap adhik vistrit jaankari pradaan karte hain to hum aapki madad kar sakte hain.\",\n   \"suggested_sections\": []\n}"
+        },
+        {
+          "role": "user",
+          "content": "BNS 2023 kya hai?"
+        },
+        {
+          "role": "assistant",
+          "content": "{\n  \"normal\": \"BNS 2023 ka pata nahin chala, yeh shayad ek naye kanun ya niyam ho sakta hai, lekin adhik jaankari ke liye hume aur data ki aavashyakta hai.\",\n   \"professional\": \"BNS 2023 ki jaankari uplabdh nahin hai, yadi yeh ek naya kanun ya niyam hai to hume iske baare mein adhik jaankari ki aavashyakta hogi, jaise ki iska ullanghan ya iske prabhaav.\",\n   \"suggested_sections\": [\"Naye Kanun\", \"Niyaam aur Vyavastha\"]\n}"
+        },
+        {
+          "role": "user",
+          "content": "What is the IPC?"
+        },
+        {
+          "role": "assistant",
+          "content": "{\n  \"normal\": \"IPC ka matlab Indian Penal Code hai, jo Bharat mein aaparadhik kanunon ka ek sangrah hai.\",\n   \"professional\": \"Indian Penal Code (IPC) Bharat mein aaparadhik kanunon ka ek pramukh sangrah hai, jo desh ke andar aaparadhik gatividhiyon ko paribhashit karta hai aur unke liye dand ka pravadhan karta hai.\",\n   \"suggested_sections\": [\"IPC 1860\", \"Aaparadhik Kanun\"]\n}"
+        },
+        {
+          "role": "user",
+          "content": "BNS 2023 kya hai? Output in JSON format with fields: summary, context, laws."
+        },
+        {
+          "role": "assistant",
+          "content": "{\n  \"summary\": \"BNS 2023 ka pata nahin chala, yeh shayad ek naye kanun ya niyam ho sakta hai\",\n   \"context\": \"Bharat mein naye kanun ya niyam banaye jaate hain, lekin BNS 2023 ki jaankari uplabdh nahin hai\",\n   \"laws\": {\n      \"related_laws\": [\"IPC\", \"CrPC\"],\n      \"suggested_sections\": [\"Naye Kanun\", \"Niyaam aur Vyavastha\"]\n   }\n}"
+        }
+      ],
+      "_id": "mock_chat_1777093160244",
+      "isPinned": false,
+      "updatedAt": "2026-04-25T04:59:20.244Z",
+      "title": "Bharat Nagrik Samman 2023 Kya?"
     }
   ]
 }
